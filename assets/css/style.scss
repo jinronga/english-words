@@ -1,0 +1,145 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+:root {
+  --text-main: #17212b;
+  --text-muted: #5c6670;
+  --line-soft: #d8dee4;
+  --surface-soft: #f6f8fa;
+  --surface-card: #ffffff;
+  --accent-blue: #1f6feb;
+  --accent-green: #0a7f64;
+}
+
+body {
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  line-height: 1.65;
+}
+
+.markdown-body,
+.container-lg,
+.wrapper {
+  max-width: min(1180px, calc(100vw - 32px));
+}
+
+.markdown-body h1 {
+  border-bottom: 0;
+  font-size: 2.25rem;
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+}
+
+.markdown-body h2 {
+  border-bottom: 1px solid var(--line-soft);
+  margin-top: 2rem;
+  padding-bottom: 0.35rem;
+}
+
+.markdown-body h3 {
+  margin-top: 1.5rem;
+}
+
+.markdown-body p,
+.markdown-body li {
+  color: var(--text-main);
+}
+
+.markdown-body a {
+  color: var(--accent-blue);
+}
+
+.site-hero {
+  background: linear-gradient(135deg, #f6f8fa 0%, #eef6f3 100%);
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  margin: 1rem 0 1.25rem;
+  padding: 1.25rem;
+}
+
+.site-kicker {
+  color: var(--accent-green);
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 0.35rem;
+}
+
+.site-lede {
+  color: var(--text-main);
+  font-size: 1.08rem;
+  margin: 0;
+}
+
+.quick-grid {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin: 1rem 0 1.5rem;
+}
+
+.quick-card {
+  background: var(--surface-card);
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  color: var(--text-main);
+  display: block;
+  padding: 1rem;
+  text-decoration: none;
+}
+
+.quick-card:hover {
+  border-color: var(--accent-blue);
+  text-decoration: none;
+}
+
+.quick-card strong {
+  display: block;
+  font-size: 1.12rem;
+  margin-bottom: 0.35rem;
+}
+
+.quick-card span {
+  color: var(--text-muted);
+  display: block;
+  font-size: 0.95rem;
+}
+
+.markdown-body table {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.markdown-body th,
+.markdown-body td {
+  vertical-align: top;
+}
+
+.markdown-body th:nth-child(6),
+.markdown-body td:nth-child(6),
+.markdown-body th:nth-child(7),
+.markdown-body td:nth-child(7) {
+  min-width: 260px;
+}
+
+.markdown-body code {
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .markdown-body,
+  .container-lg,
+  .wrapper {
+    max-width: calc(100vw - 24px);
+  }
+
+  .markdown-body h1 {
+    font-size: 1.8rem;
+  }
+
+  .site-hero {
+    padding: 1rem;
+  }
+}

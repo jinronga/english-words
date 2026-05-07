@@ -7,5 +7,5 @@
 
 | 文件 | 词条数量 | 备注 |
 | --- | --- | --- |
-| 人教版小学英语-四年级上册.md | 84 | 含词组拼接音标：teacher's desk、maths book、English book、Chinese book、help yourself、baby brother、football player |
-| 人教版小学英语-四年级下册.md | 104 | 含词组拼接音标：second floor、teacher's office、computer room、art room、music room、next to、English class、music class、PE class、go to school、go home、go to bed、come on、just a minute、be careful、New York、how about...、try on、of course |
+| [人教版小学英语-四年级上册.md](人教版小学英语-四年级上册.md) | 84 | 含词组拼接音标：teacher's desk、maths book、English book、Chinese book、help yourself、baby brother、football player |
+| [人教版小学英语-四年级下册.md](人教版小学英语-四年级下册.md) | 104 | 含词组拼接音标：second floor、teacher's office、computer room、art room、music room、next to、English class、music class、PE class、go to school、go home、go to bed、come on、just a minute、be careful、New York、how about...、try on、of course |

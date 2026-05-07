@@ -37,9 +37,10 @@
 
 ## 快速导航
 
-- [小学单词整理](小学/README.md)
-- [初中单词整理](初中/README.md)
-- [高中单词整理](高中/README.md)
+- [GitHub Pages 首页](index.md)
+- [小学单词整理](小学/)
+- [初中单词整理](初中/)
+- [高中单词整理](高中/)
 
 ## 文件格式
 
@@ -59,3 +60,26 @@ python3 scripts/add_example_sentences.py
 脚本可重复运行，会重建 `## 更多例句` 区块，不会重复追加旧内容。
 
 `scripts/example_translations.json` 是英文例句到中文译文的缓存文件，脚本会优先使用该缓存生成中文翻译。
+
+## GitHub Pages 发布
+
+本仓库已补充 GitHub Pages 配置和首页文件：
+
+- `_config.yml`：Jekyll 站点配置，使用 `jekyll-theme-primer`，并启用 Markdown 相对链接转换
+- `index.md`：站点首页，按小学、初中、高中和教材册次提供入口
+- `assets/css/style.scss`：优化长表格、移动端宽度和首页导航样式
+
+发布方式：
+
+1. 进入 GitHub 仓库 `Settings` → `Pages`
+2. `Build and deployment` 选择 `Deploy from a branch`
+3. `Branch` 选择 `main`，目录选择 `/root`
+4. 保存后等待 GitHub Pages 构建完成
+
+项目发布后的访问地址应为：
+
+```text
+https://jinronga.github.io/english-words/
+```
+
+GitHub Pages 只发布静态内容，`scripts/` 里的 Python 脚本不会在网页端运行；需要更新词表时，先在本地运行脚本并提交生成后的 Markdown 文件。

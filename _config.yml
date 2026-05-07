@@ -1,0 +1,27 @@
+title: 英语单词整理
+description: 人教版小学、初中、高中英语单词表，含英式/美式音标、英文例句和中文翻译。
+theme: jekyll-theme-primer
+markdown: kramdown
+
+plugins:
+  - jekyll-relative-links
+
+relative_links:
+  enabled: true
+  collections: true
+
+include:
+  - README.md
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+
+exclude:
+  - scripts
+  - .idea
+  - .DS_Store
+  - __pycache__
+  - "*.pyc"
