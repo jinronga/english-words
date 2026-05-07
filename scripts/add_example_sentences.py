@@ -3,19 +3,22 @@ from __future__ import annotations
 
 import pathlib
 import re
+import json
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+TRANSLATION_CACHE_PATH = ROOT / "scripts" / "example_translations.json"
 TABLE_HEADER = "| 序号 | 单词 | 英式音标 | 美式音标 | 中文翻译 |"
-TABLE_HEADER_WITH_EXAMPLES = "| 序号 | 单词 | 英式音标 | 美式音标 | 中文翻译 | 例句 |"
-TABLE_DIVIDER_WITH_EXAMPLES = "| --- | --- | --- | --- | --- | --- |"
+TABLE_HEADER_WITH_EXAMPLES = "| 序号 | 单词 | 英式音标 | 美式音标 | 中文翻译 | 例句 | 例句翻译 |"
+TABLE_DIVIDER_WITH_EXAMPLES = "| --- | --- | --- | --- | --- | --- | --- |"
 MORE_EXAMPLES_HEADING = "## 更多例句"
 MORE_EXAMPLE_COUNT = 3
+_TRANSLATION_CACHE: dict[str, str] | None = None
 
 WHITESPACE_RE = re.compile(r"\s+")
 ELLIPSIS_RE = re.compile(r"\s*(?:\.\.\.|…)\s*")
 HEADER_CELLS = ["序号", "单词", "英式音标", "美式音标", "中文翻译"]
-HEADER_CELLS_WITH_EXAMPLES = HEADER_CELLS + ["例句"]
+HEADER_CELLS_WITH_EXAMPLES = HEADER_CELLS + ["例句", "例句翻译"]
 
 PROTECTED_DOT_TERMS = {
     "a.m.",
@@ -933,6 +936,59 @@ SPECIAL_EXTRA_SENTENCES = {
         "The doctor checked the patient carefully.",
         "You should see a doctor if you feel sick.",
     ],
+}
+
+EXACT_SENTENCE_TRANSLATIONS = {
+    "Tom and Mary are classmates.": "汤姆和玛丽是同学。",
+    "OK, let's start now.": "好的，我们现在开始吧。",
+    "No, I do not need help.": "不，我不需要帮助。",
+    "Your answer is clear.": "你的回答很清楚。",
+    "The apple is red.": "这个苹果是红色的。",
+    "The grass is green.": "草是绿色的。",
+    "The banana is yellow.": "香蕉是黄色的。",
+    "The sky is blue.": "天空是蓝色的。",
+    "My shoes are black.": "我的鞋是黑色的。",
+    "The desk is brown.": "这张书桌是棕色的。",
+    "The wall is white.": "墙是白色的。",
+    "The orange bag is on the chair.": "橙色的包在椅子上。",
+    "The story is funny.": "这个故事很好笑。",
+    "I have one pencil.": "我有一支铅笔。",
+    "Two birds are in the tree.": "树上有两只鸟。",
+    "There are three books on the desk.": "桌上有三本书。",
+    "Four students are reading.": "四名学生正在读书。",
+    "Five apples are in the basket.": "篮子里有五个苹果。",
+    "Six children are playing outside.": "六个孩子正在外面玩。",
+    "Seven days make a week.": "七天组成一个星期。",
+    "Eight chairs are in the room.": "房间里有八把椅子。",
+    "Nine is my lucky number.": "九是我的幸运数字。",
+    "I can count to ten.": "我能数到十。",
+    "Wash your face every morning.": "每天早上洗脸。",
+    "My ear can hear the music.": "我的耳朵能听到音乐。",
+    "The eye is very important.": "眼睛非常重要。",
+    "My nose is a little red.": "我的鼻子有点红。",
+    "Open your mouth, please.": "请张开嘴。",
+    "He raised his arm.": "他举起了胳膊。",
+    "Raise your hand before you speak.": "发言前请举手。",
+    "Wear a hat on your head.": "把帽子戴在头上。",
+    "Exercise keeps your body healthy.": "锻炼让你的身体保持健康。",
+    "My leg hurts after running.": "跑步后我的腿疼。",
+    "My foot is in the shoe.": "我的脚在鞋里。",
+    "Our school is clean and bright.": "我们的学校干净又明亮。",
+    "We saw many animals at the zoo.": "我们在动物园看到了许多动物。",
+    "I like bread for lunch.": "我午餐喜欢吃面包。",
+    "I like juice for lunch.": "我午餐喜欢喝果汁。",
+    "I like milk for lunch.": "我午餐喜欢喝牛奶。",
+    "I like water for lunch.": "我午餐喜欢喝水。",
+    "I like rice for lunch.": "我午餐喜欢吃米饭。",
+    "I ate an egg for lunch.": "我午餐吃了一个鸡蛋。",
+    "I ate a cake for lunch.": "我午餐吃了一块蛋糕。",
+    "I ate a fish for lunch.": "我午餐吃了一条鱼。",
+    "The ruler is on the desk.": "尺子在书桌上。",
+    "The pencil is on the desk.": "铅笔在书桌上。",
+    "The eraser is on the desk.": "橡皮在书桌上。",
+    "The crayon is on the desk.": "蜡笔在书桌上。",
+    "The pen is on the desk.": "钢笔在书桌上。",
+    "The book is on the desk.": "书在书桌上。",
 }
 
 ANIMAL_HINTS = (
@@ -2000,6 +2056,173 @@ def clean_translation(translation: str) -> str:
     return WHITESPACE_RE.sub(" ", translation).strip()
 
 
+def load_translation_cache() -> dict[str, str]:
+    global _TRANSLATION_CACHE
+    if _TRANSLATION_CACHE is None:
+        if TRANSLATION_CACHE_PATH.exists():
+            _TRANSLATION_CACHE = json.loads(
+                TRANSLATION_CACHE_PATH.read_text(encoding="utf-8")
+            )
+        else:
+            _TRANSLATION_CACHE = {}
+    return _TRANSLATION_CACHE
+
+
+def primary_chinese(translation: str) -> str:
+    text = clean_translation(translation)
+    text = re.sub(r"^[（(][^）)]*[）)]", "", text).strip()
+    text = re.sub(r"[（(][^）)]*[）)]", "", text)
+    text = re.sub(r"^[^一-龥]*", "", text).strip()
+    parts = re.split(r"[；;，,、/]| 或 | 和 |及|等", text)
+    for part in parts:
+        part = part.strip(" .。:：；;，,、")
+        if part:
+            return part
+    return text.strip() or "这个词"
+
+
+def chinese_label(term: str, translation: str) -> str:
+    key = canonical_key(term)
+    labels = {
+        "i": "我",
+        "you": "你",
+        "he": "他",
+        "she": "她",
+        "it": "它",
+        "we": "我们",
+        "they": "他们",
+        "my": "我的",
+        "your": "你的",
+        "his": "他的",
+        "her": "她的",
+        "our": "我们的",
+        "their": "他们的",
+        "ruler": "尺子",
+        "pencil": "铅笔",
+        "eraser": "橡皮",
+        "crayon": "蜡笔",
+        "bag": "包",
+        "pen": "钢笔",
+        "pencil box": "铅笔盒",
+        "book": "书",
+        "mum": "妈妈",
+        "mom": "妈妈",
+        "dad": "爸爸",
+        "father": "父亲",
+        "mother": "母亲",
+        "brother": "兄弟",
+        "sister": "姐妹",
+        "orange": "橙色",
+        "uk": "英国",
+        "usa": "美国",
+        "china": "中国",
+        "canada": "加拿大",
+    }
+    return labels.get(key, primary_chinese(translation))
+
+
+def quote_term(term: str) -> str:
+    return f"“{term}”"
+
+
+def translate_example(sentence: str, term: str, translation: str, level: str) -> str:
+    sentence = normalize_sentence(sentence)
+    cached_translation = load_translation_cache().get(sentence)
+    if cached_translation:
+        return cached_translation
+    if sentence in EXACT_SENTENCE_TRANSLATIONS:
+        return EXACT_SENTENCE_TRANSLATIONS[sentence]
+
+    cn = chinese_label(term, translation)
+    key = canonical_key(term)
+    usable = term_for_sentence(term)
+    lower = usable.lower()
+
+    patterns: list[tuple[str, str]] = [
+        (rf"^I put the {re.escape(lower)} in my schoolbag\.$", f"我把{cn}放进我的书包里。"),
+        (rf"^There is (?:a|an) {re.escape(lower)} in the picture\.$", f"图画里有一个{cn}。"),
+        (rf"^I can see (?:a|an) {re.escape(lower)}\.$", f"我能看到一个{cn}。"),
+        (rf"^The {re.escape(lower)} is on the desk\.$", f"{cn}在书桌上。"),
+        (rf"^My {re.escape(lower)} is in my schoolbag\.$", f"我的{cn}在书包里。"),
+        (rf"^My {re.escape(lower)} is kind to me\.$", f"我的{cn}对我很好。"),
+        (rf"^I saw (?:a|an) {re.escape(lower)} at the zoo\.$", f"我在动物园看见了一只{cn}。"),
+        (rf"^We saw (?:a|an) {re.escape(lower)} at the zoo\.$", f"我们在动物园看见了一只{cn}。"),
+        (rf"^The {re.escape(lower)} lives near the forest\.$", f"{cn}生活在森林附近。"),
+        (rf"^The {re.escape(lower)} is interesting\.$", f"这只{cn}很有趣。"),
+        (rf"^I like {re.escape(lower)} for lunch\.$", f"我午餐喜欢吃/喝{cn}。"),
+        (rf"^I would like some {re.escape(lower)}\.$", f"我想要一些{cn}。"),
+        (rf"^{re.escape(term.capitalize())} tastes good\.$", f"{cn}尝起来很好。"),
+        (rf"^I ate (?:a|an) {re.escape(lower)} for lunch\.$", f"我午餐吃了一个{cn}。"),
+        (rf"^Would you like (?:a|an) {re.escape(lower)}\?$", f"你想要一个{cn}吗？"),
+        (rf"^The {re.escape(lower)} tastes good\.$", f"这个{cn}尝起来很好。"),
+        (rf"^Please point to your {re.escape(lower)}\.$", f"请指一指你的{cn}。"),
+        (rf"^Take care of your {re.escape(lower)}\.$", f"照顾好你的{cn}。"),
+        (rf"^We learned about {re.escape(lower)} in science class\.$", f"我们在科学课上学习了{cn}。"),
+        (rf"^I have a {re.escape(lower)} today\.$", f"我今天有点{cn}。"),
+        (rf"^Rest can help with a {re.escape(lower)}\.$", f"休息有助于缓解{cn}。"),
+        (rf"^We visited the {re.escape(lower)} yesterday\.$", f"我们昨天参观了{cn}。"),
+        (rf"^We went to the {re.escape(lower)} yesterday\.$", f"我们昨天去了{cn}。"),
+        (rf"^The {re.escape(lower)} is near my home\.$", f"{cn}在我家附近。"),
+        (rf"^The {re.escape(lower)} helped us after class\.$", f"{cn}课后帮助了我们。"),
+        (rf"^I met (?:a|an) {re.escape(lower)} yesterday\.$", f"我昨天遇见了一位{cn}。"),
+        (rf"^The {re.escape(lower)} helped us\.$", f"这位{cn}帮助了我们。"),
+        (rf"^{re.escape(term.capitalize())} is useful at school\.$", f"{cn}在学校很有用。"),
+        (rf"^The {re.escape(lower)} is useful in our lesson\.$", f"{cn}在我们的课上很有用。"),
+        (rf"^We talked about {re.escape(lower)} in class today\.$", f"我们今天在课堂上谈到了{cn}。"),
+        (rf"^The discussion gave us a deeper understanding of {re.escape(lower)}\.$", f"这次讨论让我们更深入地理解了{cn}。"),
+        (rf"^We talked about {re.escape(lower)} in class\.$", f"我们在课堂上谈到了{cn}。"),
+        (rf"^We discussed {re.escape(lower)} in class\.$", f"我们在课堂上讨论了{cn}。"),
+        (rf"^{re.escape(term.capitalize())} is important in our life\.$", f"{cn}在我们的生活中很重要。"),
+        (rf"^She answered {re.escape(lower)} during the discussion\.$", f"她在讨论中以“{cn}”的方式回答。"),
+        (rf"^The team worked {re.escape(lower)}\.$", f"团队以“{cn}”的方式工作。"),
+        (rf"^Please speak {re.escape(lower)}\.$", f"请以“{cn}”的方式说话。"),
+        (rf"^This is a {re.escape(lower)} example\.$", f"这是一个{cn}的例子。"),
+        (rf"^The result seems {re.escape(lower)}\.$", f"结果似乎很{cn}。"),
+        (rf"^The example is {re.escape(lower)}\.$", f"这个例子很{cn}。"),
+        (rf"^{re.escape(term.capitalize())} is useful in daily life\.$", f"{cn}在日常生活中很有用。"),
+        (rf"^The {re.escape(lower)} is useful in daily life\.$", f"{cn}在日常生活中很有用。"),
+        (rf"^I saw (?:a|an) {re.escape(lower)} in the picture\.$", f"我在图画中看到了一个{cn}。"),
+        (rf"^We talked about the {re.escape(lower)} in class\.$", f"我们在课堂上谈到了{cn}。"),
+        (rf"^I learned more about {re.escape(lower)} today\.$", f"我今天进一步了解了{cn}。"),
+        (rf"^We read about {re.escape(term)} in geography class\.$", f"我们在地理课上读到了{cn}。"),
+        (rf"^We read about {re.escape(term)} in the lesson\.$", f"我们在课文中读到了{cn}。"),
+        (rf"^We learned about {re.escape(term)} in class\.$", f"我们在课堂上学习了{cn}。"),
+        (rf"^I want to know more about {re.escape(term)}\.$", f"我想进一步了解{cn}。"),
+    ]
+    for pattern, chinese in patterns:
+        if re.match(pattern, sentence, re.I):
+            return chinese
+
+    if sentence == f'We practiced the phrase "{term}" in class.':
+        return f"我们在课堂上练习了短语{quote_term(term)}。"
+    if sentence == f'Can you make a sentence with "{term}"?':
+        return f"你能用{quote_term(term)}造一个句子吗？"
+    if sentence == f'We learned the word "{term}" today.':
+        return f"我们今天学习了单词{quote_term(term)}。"
+    if sentence == f'Please read "{term}" aloud.':
+        return f"请大声读出{quote_term(term)}。"
+    if sentence == f'Can you use "{term}" in your own sentence?':
+        return f"你能用{quote_term(term)}造自己的句子吗？"
+    if sentence == f'The word "{term}" is used as a verb here.':
+        return f"单词{quote_term(term)}在这里作动词使用。"
+    if sentence == f'Can you use "{term}" in a sentence?':
+        return f"你能用{quote_term(term)}造句吗？"
+    if sentence == f'The word "{term}" shows an action.':
+        return f"单词{quote_term(term)}表示一个动作。"
+    if sentence == f'Please make your own sentence with "{term}".':
+        return f"请用{quote_term(term)}造一个自己的句子。"
+    if sentence == f'The word "{term}" shows an action in this sentence.':
+        return f"单词{quote_term(term)}在这个句子中表示动作。"
+    if sentence == f"The word {term} appears in the reading passage.":
+        return f"单词{quote_term(term)}出现在阅读文章中。"
+
+    if key in SPECIAL_EXAMPLES or key in SPECIAL_EXTRA_SENTENCES:
+        return f"这个句子的中文意思与{quote_term(term)}（{cn}）有关。"
+    if " " in term.strip() or any(mark in term for mark in ("...", "…", "(", ")", "/", "!", "?")):
+        return f"这个句子展示了短语{quote_term(term)}的用法，意思与“{cn}”有关。"
+    return f"这个句子使用了单词{quote_term(term)}，意思与“{cn}”有关。"
+
+
 def canonical_key(term: str) -> str:
     key = term.strip()
     if key not in PROTECTED_DOT_TERMS:
@@ -2455,6 +2678,7 @@ def append_more_examples(lines: list[str], rows: list[tuple[str, str, str]], lev
             generate_more_sentences(word, translation, level), start=1
         ):
             lines.append(f"{sentence_idx}. {sentence}")
+            lines.append(f"   中文：{translate_example(sentence, word, translation, level)}")
         lines.append("")
     while lines and not lines[-1].strip():
         lines.pop()
@@ -2504,7 +2728,8 @@ def update_vocab_file(path: pathlib.Path) -> tuple[int, bool]:
                 continue
             row_count += 1
             sentence = generate_sentence(cells[1], cells[4], level)
-            new_cells = cells[:5] + [sentence]
+            sentence_translation = translate_example(sentence, cells[1], cells[4], level)
+            new_cells = cells[:5] + [sentence, sentence_translation]
             rows.append((cells[0], cells[1], cells[4]))
             updated.append(markdown_row(new_cells))
             continue
