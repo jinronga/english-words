@@ -1,68 +1,157 @@
 ---
 title: 英语单词整理
-permalink: /
+description: 人教版小学、初中、高中英语单词表首页
+home: true
 ---
 
-# 英语单词整理
-
-<section class="site-hero">
-  <p class="site-kicker">人教版小学、初中、高中英语词表</p>
-  <p class="site-lede">6373 个词条，25492 条例句。每个词条包含中文翻译、英式/美式音标、表格例句、补充例句和对应中文翻译。</p>
+<section class="intro-strip">
+  <p class="intro-text">按教材册次整理单词、音标、例句与中文翻译。</p>
+  <div class="metric-grid" aria-label="站点统计">
+    <div class="metric">
+      <span class="metric-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M6 5.5h8.5a3 3 0 0 1 3 3V19H9a3 3 0 0 0-3-3z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 8.5h8m-8 3h8m-8 3h5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </span>
+      <div><strong>6373</strong><span>词条</span></div>
+    </div>
+    <div class="metric">
+      <span class="metric-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M4.5 6.5h15v10h-4l-3 3-3-3h-5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      </span>
+      <div><strong>25492</strong><span>例句</span></div>
+    </div>
+    <div class="metric">
+      <span class="metric-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 4v16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 9.5c0-1.9 1.8-3 4-3s4 1 4 2.7c0 3.4-6 2.8-6 5.8 0 1.5 1.2 2.5 3 2.5 1.6 0 2.9-.6 3.7-1.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </span>
+      <div><strong>UK / US</strong><span>音标</span></div>
+    </div>
+    <div class="metric">
+      <span class="metric-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M6 5.5h8.5a3 3 0 0 1 3 3V19H9a3 3 0 0 0-3-3z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 8.5h8m-8 3h8m-8 3h5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </span>
+      <div><strong>中文</strong><span>翻译</span></div>
+    </div>
+  </div>
 </section>
 
-<div class="quick-grid">
-  <a class="quick-card" href="小学/">
-    <strong>小学</strong>
-    <span>三年级到六年级，8 个词表，849 个词条</span>
-  </a>
-  <a class="quick-card" href="初中/">
-    <strong>初中</strong>
-    <span>七年级到九年级，5 个词表，2317 个词条</span>
-  </a>
-  <a class="quick-card" href="高中/">
-    <strong>高中</strong>
-    <span>必修 1-5、选修 6-9，9 个词表，3207 个词条</span>
-  </a>
-</div>
+<section class="workspace">
+  <aside class="nav-sidebar">
+    <div class="nav-title">教材目录</div>
 
-## 内容概览
+    <details class="nav-group" open>
+      <summary>小学词汇表</summary>
+      <div class="nav-list">
+        <a class="nav-link is-active" href="{{ '/小学/三年级/人教版小学英语-三年级上册.html' | relative_url }}">三年级上册</a>
+        <a class="nav-link" href="{{ '/小学/三年级/人教版小学英语-三年级下册.html' | relative_url }}">三年级下册</a>
+        <a class="nav-link" href="{{ '/小学/四年级/人教版小学英语-四年级上册.html' | relative_url }}">四年级上册</a>
+        <a class="nav-link" href="{{ '/小学/四年级/人教版小学英语-四年级下册.html' | relative_url }}">四年级下册</a>
+        <a class="nav-link" href="{{ '/小学/五年级/人教版小学英语-五年级上册.html' | relative_url }}">五年级上册</a>
+        <a class="nav-link" href="{{ '/小学/五年级/人教版小学英语-五年级下册.html' | relative_url }}">五年级下册</a>
+        <a class="nav-link" href="{{ '/小学/六年级/人教版小学英语-六年级上册.html' | relative_url }}">六年级上册</a>
+        <a class="nav-link" href="{{ '/小学/六年级/人教版小学英语-六年级下册.html' | relative_url }}">六年级下册</a>
+      </div>
+    </details>
 
-| 学段 | 目录 | 文件数量 | 词条数量 | 例句数量 |
-| --- | --- | ---: | ---: | ---: |
-| 小学 | [小学/](小学/) | 8 | 849 | 3396 |
-| 初中 | [初中/](初中/) | 5 | 2317 | 9268 |
-| 高中 | [高中/](高中/) | 9 | 3207 | 12828 |
-| 合计 | - | 22 | 6373 | 25492 |
+    <details class="nav-group">
+      <summary>初中词汇表</summary>
+      <div class="nav-list">
+        <a class="nav-link" href="{{ '/初中/' | relative_url }}">初中总览</a>
+        <a class="nav-link" href="{{ '/初中/七年级/' | relative_url }}">七年级</a>
+        <a class="nav-link" href="{{ '/初中/八年级/' | relative_url }}">八年级</a>
+        <a class="nav-link" href="{{ '/初中/九年级/' | relative_url }}">九年级</a>
+      </div>
+    </details>
 
-## 按教材浏览
+    <details class="nav-group">
+      <summary>高中词汇表</summary>
+      <div class="nav-list">
+        <a class="nav-link" href="{{ '/高中/' | relative_url }}">高中总览</a>
+        <a class="nav-link" href="{{ '/高中/必修/' | relative_url }}">必修</a>
+        <a class="nav-link" href="{{ '/高中/选修/' | relative_url }}">选修</a>
+      </div>
+    </details>
+  </aside>
 
-### 小学
+  <section class="table-panel">
+    <div class="table-head">
+      <div>
+        <div class="crumb">{{ site.data.home_demo.section }} <small>共 <span id="visible-count">{{ site.data.home_demo.count }}</span> / <span id="total-count">{{ site.data.home_demo.count }}</span> 词</small></div>
+      </div>
+      <label class="searchbox" for="vocab-search" role="search">
+        <span aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M16 16l4.2 4.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </span>
+        <input id="vocab-search" type="search" placeholder="搜索单词、中文或例句">
+      </label>
+    </div>
 
-| 年级 | 词表 |
-| --- | --- |
-| 三年级 | [上册](小学/三年级/人教版小学英语-三年级上册.md) / [下册](小学/三年级/人教版小学英语-三年级下册.md) |
-| 四年级 | [上册](小学/四年级/人教版小学英语-四年级上册.md) / [下册](小学/四年级/人教版小学英语-四年级下册.md) |
-| 五年级 | [上册](小学/五年级/人教版小学英语-五年级上册.md) / [下册](小学/五年级/人教版小学英语-五年级下册.md) |
-| 六年级 | [上册](小学/六年级/人教版小学英语-六年级上册.md) / [下册](小学/六年级/人教版小学英语-六年级下册.md) |
+    <div class="table-shell">
+      <table class="word-table" data-vocab-table>
+        <thead>
+          <tr>
+            <th class="no-col">序号</th>
+            <th class="word-col">单词</th>
+            <th class="phonetic-col">UK音标</th>
+            <th class="phonetic-col">US音标</th>
+            <th class="zh-col">中文</th>
+            <th class="example-col">例句</th>
+            <th class="translation-col">翻译</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% assign demo_rows = site.data.home_demo.rows %}
+          {% for row in demo_rows %}
+          <tr data-index="{{ forloop.index0 }}" tabindex="0" {% if forloop.first %}class="is-active"{% endif %}>
+            <td class="no-col">{{ row.no }}</td>
+            <td class="word-col">{{ row.word }}</td>
+            <td class="phonetic-col">{{ row.uk }}</td>
+            <td class="phonetic-col">{{ row.us }}</td>
+            <td class="zh-col">{{ row.zh }}</td>
+            <td class="example-col">{{ row.example }}</td>
+            <td class="translation-col">{{ row.translation }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="table-empty" id="table-empty" hidden>没有找到匹配的词条。</div>
+    </div>
+  </section>
 
-### 初中
+  {% assign sample = site.data.home_demo.rows | first %}
+  <aside class="detail-panel" data-detail>
+    <div class="detail-head">
+      <div>
+        <div class="detail-wordline">
+          <h2>{{ sample.word }}</h2>
+          <span class="detail-speaker" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M11 7 7.5 10H5v4h2.5L11 17V7z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"></path><path d="M14.5 9.5a3.8 3.8 0 0 1 0 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path><path d="M16.8 7.2a7 7 0 0 1 0 9.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg>
+          </span>
+        </div>
+        <div class="detail-phonetic">UK <span>{{ sample.uk }}</span></div>
+        <div class="detail-phonetic">US <span>{{ sample.us }}</span></div>
+      </div>
+      <div class="detail-meta">
+        <span>{{ sample.detail }}</span>
+        <ul class="tag-list">
+          {% for tag in sample.tags %}
+          <li>{{ tag }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
 
-| 年级 | 词表 |
-| --- | --- |
-| 七年级 | [上册](初中/七年级/人教版初中英语-七年级上册.md) / [下册](初中/七年级/人教版初中英语-七年级下册.md) |
-| 八年级 | [上册](初中/八年级/人教版初中英语-八年级上册.md) / [下册](初中/八年级/人教版初中英语-八年级下册.md) |
-| 九年级 | [全册](初中/九年级/人教版初中英语-九年级全册.md) |
+    <section class="detail-examples">
+      <h3>例句 <small>({{ sample.examples.size }})</small></h3>
+      <ol class="example-list">
+        {% for example in sample.examples %}
+        <li>
+          <div class="example-en">{{ example.en }} <span class="example-speaker" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 7 7.5 10H5v4h2.5L11 17V7z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"></path><path d="M14.5 9.5a3.8 3.8 0 0 1 0 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path><path d="M16.8 7.2a7 7 0 0 1 0 9.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg></span></div>
+          <div class="example-zh">{{ example.zh }}</div>
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+  </aside>
+</section>
 
-### 高中
-
-| 类别 | 词表 |
-| --- | --- |
-| 必修 | [必修 1](高中/必修/人教版高中英语-必修1.md) / [必修 2](高中/必修/人教版高中英语-必修2.md) / [必修 3](高中/必修/人教版高中英语-必修3.md) / [必修 4](高中/必修/人教版高中英语-必修4.md) / [必修 5](高中/必修/人教版高中英语-必修5.md) |
-| 选修 | [选修 6](高中/选修/人教版高中英语-选修6.md) / [选修 7](高中/选修/人教版高中英语-选修7.md) / [选修 8](高中/选修/人教版高中英语-选修8.md) / [选修 9](高中/选修/人教版高中英语-选修9.md) |
-
-## 数据说明
-
-- 翻译来源：`https://english.mikigo.site/`
-- 音标来源：有道词典（英式 / 美式）
-- 词组音标说明：词组缺少直出音标时，按组成词音标拼接供参考
-- 例句说明：每个词条在表格中保留 1 条英文例句和中文翻译，表格后 `## 更多例句` 中再提供 3 条英文例句及对应中文翻译
+<script id="home-data" type="application/json">{{ site.data.home_demo | jsonify }}</script>

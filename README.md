@@ -37,7 +37,7 @@
 
 ## 快速导航
 
-- [GitHub Pages 首页](index.md)
+- [GitHub Pages 首页](https://jinronga.github.io/english-words/)
 - [小学单词整理](小学/)
 - [初中单词整理](初中/)
 - [高中单词整理](高中/)
@@ -63,11 +63,14 @@ python3 scripts/add_example_sentences.py
 
 ## GitHub Pages 发布
 
-本仓库已补充 GitHub Pages 配置和首页文件：
+本仓库已补充 GitHub Pages 配置和词典式首页界面：
 
-- `_config.yml`：Jekyll 站点配置，使用 `jekyll-theme-primer`，并启用 Markdown 相对链接转换
-- `index.md`：站点首页，按小学、初中、高中和教材册次提供入口
-- `assets/css/style.scss`：优化长表格、移动端宽度和首页导航样式
+- `_config.yml`：Jekyll 站点配置，并启用 Markdown 相对链接转换
+- `_layouts/default.html`：自定义站点布局，包含顶部导航和统一页面骨架
+- `index.md`：词典式首页，包含教材目录、词表预览、搜索和单词详情
+- `_data/home_demo.json`：首页示例词条数据
+- `assets/css/style.scss`：实现三栏布局、表格、详情面板和移动端响应式样式
+- `assets/js/home.js`：实现首页搜索和选中词条详情切换
 
 发布方式：
 

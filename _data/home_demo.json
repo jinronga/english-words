@@ -1,0 +1,229 @@
+{
+  "section": "小学 / 三年级上册",
+  "count": 8,
+  "rows": [
+    {
+      "no": 1,
+      "word": "ruler",
+      "uk": "[ˈruːlə(r)]",
+      "us": "[ˈruːlər]",
+      "zh": "尺子",
+      "example": "I have a new ruler.",
+      "translation": "我有一把新尺子。",
+      "detail": "n. 尺子；统治者",
+      "tags": [
+        "名词",
+        "可数名词"
+      ],
+      "examples": [
+        {
+          "en": "I have a new ruler.",
+          "zh": "我有一把新尺子。"
+        },
+        {
+          "en": "Please pass me the ruler.",
+          "zh": "请把尺子递给我。"
+        },
+        {
+          "en": "The ruler is 15 centimeters long.",
+          "zh": "这把尺子长 15 厘米。"
+        }
+      ]
+    },
+    {
+      "no": 2,
+      "word": "pencil",
+      "uk": "[ˈpens(ə)l]",
+      "us": "[ˈpens(ə)l]",
+      "zh": "铅笔",
+      "example": "This is my pencil.",
+      "translation": "这是我的铅笔。",
+      "detail": "n. 铅笔",
+      "tags": [
+        "名词",
+        "可数名词"
+      ],
+      "examples": [
+        {
+          "en": "This is my pencil.",
+          "zh": "这是我的铅笔。"
+        },
+        {
+          "en": "I need a pencil.",
+          "zh": "我需要一支铅笔。"
+        },
+        {
+          "en": "The pencil is on the desk.",
+          "zh": "铅笔在桌子上。"
+        }
+      ]
+    },
+    {
+      "no": 3,
+      "word": "eraser",
+      "uk": "[ɪˈreɪzə(r)]",
+      "us": "[ɪˈreɪsər]",
+      "zh": "橡皮",
+      "example": "Where is my eraser?",
+      "translation": "我的橡皮在哪里？",
+      "detail": "n. 橡皮",
+      "tags": [
+        "名词",
+        "可数名词"
+      ],
+      "examples": [
+        {
+          "en": "Where is my eraser?",
+          "zh": "我的橡皮在哪里？"
+        },
+        {
+          "en": "I need an eraser.",
+          "zh": "我需要一块橡皮。"
+        },
+        {
+          "en": "The eraser is white.",
+          "zh": "这块橡皮是白色的。"
+        }
+      ]
+    },
+    {
+      "no": 4,
+      "word": "crayon",
+      "uk": "[ˈkreɪən]",
+      "us": "[ˈkreɪɑːn]",
+      "zh": "蜡笔",
+      "example": "I have many crayons.",
+      "translation": "我有许多蜡笔。",
+      "detail": "n. 蜡笔",
+      "tags": [
+        "名词",
+        "可数名词"
+      ],
+      "examples": [
+        {
+          "en": "I have many crayons.",
+          "zh": "我有许多蜡笔。"
+        },
+        {
+          "en": "This crayon is red.",
+          "zh": "这支蜡笔是红色的。"
+        },
+        {
+          "en": "Put the crayons in the box.",
+          "zh": "把蜡笔放进盒子里。"
+        }
+      ]
+    },
+    {
+      "no": 5,
+      "word": "bag",
+      "uk": "[bæɡ]",
+      "us": "[bæɡ]",
+      "zh": "包；书包",
+      "example": "This is my school bag.",
+      "translation": "这是我的书包。",
+      "detail": "n. 包；书包",
+      "tags": [
+        "名词",
+        "可数名词"
+      ],
+      "examples": [
+        {
+          "en": "This is my school bag.",
+          "zh": "这是我的书包。"
+        },
+        {
+          "en": "My bag is on the chair.",
+          "zh": "我的书包在椅子上。"
+        },
+        {
+          "en": "The bag is heavy.",
+          "zh": "这个书包很重。"
+        }
+      ]
+    },
+    {
+      "no": 6,
+      "word": "pen",
+      "uk": "[pen]",
+      "us": "[pen]",
+      "zh": "钢笔",
+      "example": "That is your pen.",
+      "translation": "那是你的钢笔。",
+      "detail": "n. 钢笔；笔",
+      "tags": [
+        "名词",
+        "可数名词"
+      ],
+      "examples": [
+        {
+          "en": "That is your pen.",
+          "zh": "那是你的钢笔。"
+        },
+        {
+          "en": "I write with a pen.",
+          "zh": "我用钢笔写字。"
+        },
+        {
+          "en": "The pen is blue.",
+          "zh": "这支钢笔是蓝色的。"
+        }
+      ]
+    },
+    {
+      "no": 7,
+      "word": "pencil box",
+      "uk": "-",
+      "us": "[ˈpensəl bɑːks]",
+      "zh": "铅笔盒",
+      "example": "Open your pencil box.",
+      "translation": "打开你的铅笔盒。",
+      "detail": "n. 铅笔盒",
+      "tags": [
+        "名词"
+      ],
+      "examples": [
+        {
+          "en": "Open your pencil box.",
+          "zh": "打开你的铅笔盒。"
+        },
+        {
+          "en": "My pencil box is small.",
+          "zh": "我的铅笔盒很小。"
+        },
+        {
+          "en": "I keep my pencils in the pencil box.",
+          "zh": "我把铅笔放在铅笔盒里。"
+        }
+      ]
+    },
+    {
+      "no": 8,
+      "word": "book",
+      "uk": "[bʊk]",
+      "us": "[bʊk]",
+      "zh": "书",
+      "example": "I like reading books.",
+      "translation": "我喜欢读书。",
+      "detail": "n. 书",
+      "tags": [
+        "名词",
+        "可数名词"
+      ],
+      "examples": [
+        {
+          "en": "I like reading books.",
+          "zh": "我喜欢读书。"
+        },
+        {
+          "en": "This book is interesting.",
+          "zh": "这本书很有趣。"
+        },
+        {
+          "en": "Put the book on the desk.",
+          "zh": "把书放在桌子上。"
+        }
+      ]
+    }
+  ]
+}
