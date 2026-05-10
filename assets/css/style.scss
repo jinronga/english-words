@@ -390,10 +390,14 @@ a:hover {
 }
 
 .nav-link {
+  align-items: center;
   border-radius: 6px;
   color: var(--text);
+  display: flex;
   font-size: 0.96rem;
-  padding: 9px 12px;
+  gap: 10px;
+  justify-content: space-between;
+  padding: 8px 8px 8px 12px;
 }
 
 .nav-link:hover {
@@ -404,6 +408,32 @@ a:hover {
   background: linear-gradient(90deg, var(--blue-soft), #f4f8fd);
   color: var(--blue);
   font-weight: 600;
+}
+
+.nav-action {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  flex: 0 0 auto;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 5px 8px;
+}
+
+.nav-link:hover .nav-action,
+.nav-link.is-active .nav-action {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+.markdown-body .nav-link {
+  color: var(--text);
+}
+
+.markdown-body .nav-link.is-active {
+  color: var(--blue);
 }
 
 .table-panel {
@@ -535,6 +565,55 @@ a:hover {
   word-break: break-word;
 }
 
+.word-table .action-col {
+  text-align: center;
+  white-space: nowrap;
+  width: 86px;
+}
+
+.row-action,
+.action-button {
+  align-items: center;
+  background: var(--blue);
+  border: 1px solid var(--blue);
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1;
+  min-height: 32px;
+  padding: 8px 14px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.row-action:hover,
+.action-button:hover {
+  background: #173d60;
+  border-color: #173d60;
+  text-decoration: none;
+}
+
+.row-action:focus-visible,
+.action-button:focus-visible,
+.nav-link:focus-visible {
+  outline: 3px solid rgba(31, 78, 121, 0.22);
+  outline-offset: 2px;
+}
+
+.markdown-body .action-button {
+  color: #fff;
+  text-decoration: none;
+}
+
+.markdown-body .action-button:hover {
+  color: #fff;
+}
+
 .table-empty {
   color: var(--muted);
   padding: 18px 16px;
@@ -546,6 +625,12 @@ a:hover {
   flex-direction: column;
   gap: 18px;
   padding: 18px 16px;
+}
+
+.detail-action {
+  align-self: stretch;
+  margin-top: auto;
+  min-height: 38px;
 }
 
 .detail-head {

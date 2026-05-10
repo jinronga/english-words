@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const visibleCount = document.getElementById('visible-count');
   const totalCount = document.getElementById('total-count');
   const emptyState = document.getElementById('table-empty');
+  const fullListUrl = detail?.dataset.fullListUrl || '#';
 
   if (!dataEl || !table || !detail) {
     return;
@@ -56,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
           `).join('')}
         </ol>
       </section>
+      <a class="action-button detail-action" href="${esc(fullListUrl)}">查看完整词表</a>
     `;
   };
 

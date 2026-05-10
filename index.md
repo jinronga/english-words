@@ -41,33 +41,33 @@ home: true
     <details class="nav-group" open>
       <summary>小学词汇表</summary>
       <div class="nav-list">
-        <a class="nav-link is-active" href="{{ '/小学/三年级/人教版小学英语-三年级上册.html' | relative_url }}">三年级上册</a>
-        <a class="nav-link" href="{{ '/小学/三年级/人教版小学英语-三年级下册.html' | relative_url }}">三年级下册</a>
-        <a class="nav-link" href="{{ '/小学/四年级/人教版小学英语-四年级上册.html' | relative_url }}">四年级上册</a>
-        <a class="nav-link" href="{{ '/小学/四年级/人教版小学英语-四年级下册.html' | relative_url }}">四年级下册</a>
-        <a class="nav-link" href="{{ '/小学/五年级/人教版小学英语-五年级上册.html' | relative_url }}">五年级上册</a>
-        <a class="nav-link" href="{{ '/小学/五年级/人教版小学英语-五年级下册.html' | relative_url }}">五年级下册</a>
-        <a class="nav-link" href="{{ '/小学/六年级/人教版小学英语-六年级上册.html' | relative_url }}">六年级上册</a>
-        <a class="nav-link" href="{{ '/小学/六年级/人教版小学英语-六年级下册.html' | relative_url }}">六年级下册</a>
+        <a class="nav-link is-active" href="{{ '/小学/三年级/人教版小学英语-三年级上册.html' | relative_url }}"><span>三年级上册</span><span class="nav-action">当前</span></a>
+        <a class="nav-link" href="{{ '/小学/三年级/人教版小学英语-三年级下册.html' | relative_url }}"><span>三年级下册</span><span class="nav-action">打开</span></a>
+        <a class="nav-link" href="{{ '/小学/四年级/人教版小学英语-四年级上册.html' | relative_url }}"><span>四年级上册</span><span class="nav-action">打开</span></a>
+        <a class="nav-link" href="{{ '/小学/四年级/人教版小学英语-四年级下册.html' | relative_url }}"><span>四年级下册</span><span class="nav-action">打开</span></a>
+        <a class="nav-link" href="{{ '/小学/五年级/人教版小学英语-五年级上册.html' | relative_url }}"><span>五年级上册</span><span class="nav-action">打开</span></a>
+        <a class="nav-link" href="{{ '/小学/五年级/人教版小学英语-五年级下册.html' | relative_url }}"><span>五年级下册</span><span class="nav-action">打开</span></a>
+        <a class="nav-link" href="{{ '/小学/六年级/人教版小学英语-六年级上册.html' | relative_url }}"><span>六年级上册</span><span class="nav-action">打开</span></a>
+        <a class="nav-link" href="{{ '/小学/六年级/人教版小学英语-六年级下册.html' | relative_url }}"><span>六年级下册</span><span class="nav-action">打开</span></a>
       </div>
     </details>
 
     <details class="nav-group">
       <summary>初中词汇表</summary>
       <div class="nav-list">
-        <a class="nav-link" href="{{ '/初中/' | relative_url }}">初中总览</a>
-        <a class="nav-link" href="{{ '/初中/七年级/' | relative_url }}">七年级</a>
-        <a class="nav-link" href="{{ '/初中/八年级/' | relative_url }}">八年级</a>
-        <a class="nav-link" href="{{ '/初中/九年级/' | relative_url }}">九年级</a>
+        <a class="nav-link" href="{{ '/初中/' | relative_url }}"><span>初中总览</span><span class="nav-action">打开</span></a>
+        <a class="nav-link" href="{{ '/初中/七年级/' | relative_url }}"><span>七年级</span><span class="nav-action">打开</span></a>
+        <a class="nav-link" href="{{ '/初中/八年级/' | relative_url }}"><span>八年级</span><span class="nav-action">打开</span></a>
+        <a class="nav-link" href="{{ '/初中/九年级/' | relative_url }}"><span>九年级</span><span class="nav-action">打开</span></a>
       </div>
     </details>
 
     <details class="nav-group">
       <summary>高中词汇表</summary>
       <div class="nav-list">
-        <a class="nav-link" href="{{ '/高中/' | relative_url }}">高中总览</a>
-        <a class="nav-link" href="{{ '/高中/必修/' | relative_url }}">必修</a>
-        <a class="nav-link" href="{{ '/高中/选修/' | relative_url }}">选修</a>
+        <a class="nav-link" href="{{ '/高中/' | relative_url }}"><span>高中总览</span><span class="nav-action">打开</span></a>
+        <a class="nav-link" href="{{ '/高中/必修/' | relative_url }}"><span>必修</span><span class="nav-action">打开</span></a>
+        <a class="nav-link" href="{{ '/高中/选修/' | relative_url }}"><span>选修</span><span class="nav-action">打开</span></a>
       </div>
     </details>
   </aside>
@@ -96,6 +96,7 @@ home: true
             <th class="zh-col">中文</th>
             <th class="example-col">例句</th>
             <th class="translation-col">翻译</th>
+            <th class="action-col">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -109,6 +110,7 @@ home: true
             <td class="zh-col">{{ row.zh }}</td>
             <td class="example-col">{{ row.example }}</td>
             <td class="translation-col">{{ row.translation }}</td>
+            <td class="action-col"><button class="row-action" type="button" data-row-action aria-label="查看 {{ row.word }} 详情">详情</button></td>
           </tr>
           {% endfor %}
         </tbody>
@@ -118,7 +120,7 @@ home: true
   </section>
 
   {% assign sample = site.data.home_demo.rows | first %}
-  <aside class="detail-panel" data-detail>
+  <aside class="detail-panel" data-detail data-full-list-url="{{ '/小学/三年级/人教版小学英语-三年级上册.html' | relative_url }}">
     <div class="detail-head">
       <div>
         <div class="detail-wordline">
@@ -151,6 +153,8 @@ home: true
         {% endfor %}
       </ol>
     </section>
+
+    <a class="action-button detail-action" href="{{ '/小学/三年级/人教版小学英语-三年级上册.html' | relative_url }}">查看完整词表</a>
   </aside>
 </section>
 
