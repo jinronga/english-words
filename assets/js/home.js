@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
   const themeToggle = document.querySelector('[data-theme-toggle]');
-  const themeLabel = themeToggle?.querySelector('[data-theme-label]');
   const mediaQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
 
   const getStoredTheme = () => {
@@ -25,10 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     themeToggle.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
     themeToggle.setAttribute('aria-label', `切换到${nextLabel}模式`);
     themeToggle.title = `切换到${nextLabel}模式`;
-
-    if (themeLabel) {
-      themeLabel.textContent = theme === 'dark' ? '暗黑' : '白色';
-    }
   };
 
   const applyTheme = (theme, persist = false) => {
