@@ -199,24 +199,26 @@ a:hover {
 
 .theme-toggle {
   align-items: center;
-  background: var(--control-bg);
-  border: 1px solid var(--line);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
   border-radius: 999px;
   box-shadow: var(--shadow);
-  color: var(--text);
+  color: var(--blue);
   cursor: pointer;
   display: inline-flex;
   flex: 0 0 auto;
-  height: 38px;
+  height: 40px;
   justify-content: center;
   padding: 0;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-  width: 38px;
+  position: relative;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  width: 40px;
 }
 
 .theme-toggle:hover {
-  background: var(--nav-hover);
-  border-color: var(--line-strong);
+  background: var(--blue-soft);
+  border-color: var(--blue);
+  transform: translateY(-1px);
 }
 
 .theme-icon {
@@ -500,7 +502,7 @@ html[data-theme="dark"] .theme-icon-moon {
   font-size: 0.96rem;
   gap: 10px;
   justify-content: space-between;
-  padding: 8px 8px 8px 12px;
+  padding: 8px 12px;
 }
 
 .nav-link:hover {
@@ -513,23 +515,6 @@ html[data-theme="dark"] .theme-icon-moon {
   font-weight: 600;
 }
 
-.nav-action {
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: var(--muted);
-  flex: 0 0 auto;
-  font-size: 0.78rem;
-  font-weight: 600;
-  line-height: 1;
-  padding: 5px 8px;
-}
-
-.nav-link:hover .nav-action,
-.nav-link.is-active .nav-action {
-  background: var(--blue);
-  border-color: var(--blue);
-  color: var(--button-text);
-}
 
 .markdown-body .nav-link {
   color: var(--text);

@@ -41,33 +41,33 @@ home: true
     <details class="nav-group" open>
       <summary>小学词汇表</summary>
       <div class="nav-list">
-        <a class="nav-link is-active" href="{{ '/小学/三年级/人教版小学英语-三年级上册.html' | relative_url }}"><span>三年级上册</span><span class="nav-action">当前</span></a>
-        <a class="nav-link" href="{{ '/小学/三年级/人教版小学英语-三年级下册.html' | relative_url }}"><span>三年级下册</span><span class="nav-action">打开</span></a>
-        <a class="nav-link" href="{{ '/小学/四年级/人教版小学英语-四年级上册.html' | relative_url }}"><span>四年级上册</span><span class="nav-action">打开</span></a>
-        <a class="nav-link" href="{{ '/小学/四年级/人教版小学英语-四年级下册.html' | relative_url }}"><span>四年级下册</span><span class="nav-action">打开</span></a>
-        <a class="nav-link" href="{{ '/小学/五年级/人教版小学英语-五年级上册.html' | relative_url }}"><span>五年级上册</span><span class="nav-action">打开</span></a>
-        <a class="nav-link" href="{{ '/小学/五年级/人教版小学英语-五年级下册.html' | relative_url }}"><span>五年级下册</span><span class="nav-action">打开</span></a>
-        <a class="nav-link" href="{{ '/小学/六年级/人教版小学英语-六年级上册.html' | relative_url }}"><span>六年级上册</span><span class="nav-action">打开</span></a>
-        <a class="nav-link" href="{{ '/小学/六年级/人教版小学英语-六年级下册.html' | relative_url }}"><span>六年级下册</span><span class="nav-action">打开</span></a>
+        <a class="nav-link is-active" href="{{ '/小学/三年级/人教版小学英语-三年级上册.html' | relative_url }}"><span>三年级上册</span></a>
+        <a class="nav-link" href="{{ '/小学/三年级/人教版小学英语-三年级下册.html' | relative_url }}"><span>三年级下册</span></a>
+        <a class="nav-link" href="{{ '/小学/四年级/人教版小学英语-四年级上册.html' | relative_url }}"><span>四年级上册</span></a>
+        <a class="nav-link" href="{{ '/小学/四年级/人教版小学英语-四年级下册.html' | relative_url }}"><span>四年级下册</span></a>
+        <a class="nav-link" href="{{ '/小学/五年级/人教版小学英语-五年级上册.html' | relative_url }}"><span>五年级上册</span></a>
+        <a class="nav-link" href="{{ '/小学/五年级/人教版小学英语-五年级下册.html' | relative_url }}"><span>五年级下册</span></a>
+        <a class="nav-link" href="{{ '/小学/六年级/人教版小学英语-六年级上册.html' | relative_url }}"><span>六年级上册</span></a>
+        <a class="nav-link" href="{{ '/小学/六年级/人教版小学英语-六年级下册.html' | relative_url }}"><span>六年级下册</span></a>
       </div>
     </details>
 
     <details class="nav-group">
       <summary>初中词汇表</summary>
       <div class="nav-list">
-        <a class="nav-link" href="{{ '/初中/' | relative_url }}"><span>初中总览</span><span class="nav-action">打开</span></a>
-        <a class="nav-link" href="{{ '/初中/七年级/' | relative_url }}"><span>七年级</span><span class="nav-action">打开</span></a>
-        <a class="nav-link" href="{{ '/初中/八年级/' | relative_url }}"><span>八年级</span><span class="nav-action">打开</span></a>
-        <a class="nav-link" href="{{ '/初中/九年级/' | relative_url }}"><span>九年级</span><span class="nav-action">打开</span></a>
+        <a class="nav-link" href="{{ '/初中/' | relative_url }}"><span>初中总览</span></a>
+        <a class="nav-link" href="{{ '/初中/七年级/' | relative_url }}"><span>七年级</span></a>
+        <a class="nav-link" href="{{ '/初中/八年级/' | relative_url }}"><span>八年级</span></a>
+        <a class="nav-link" href="{{ '/初中/九年级/' | relative_url }}"><span>九年级</span></a>
       </div>
     </details>
 
     <details class="nav-group">
       <summary>高中词汇表</summary>
       <div class="nav-list">
-        <a class="nav-link" href="{{ '/高中/' | relative_url }}"><span>高中总览</span><span class="nav-action">打开</span></a>
-        <a class="nav-link" href="{{ '/高中/必修/' | relative_url }}"><span>必修</span><span class="nav-action">打开</span></a>
-        <a class="nav-link" href="{{ '/高中/选修/' | relative_url }}"><span>选修</span><span class="nav-action">打开</span></a>
+        <a class="nav-link" href="{{ '/高中/' | relative_url }}"><span>高中总览</span></a>
+        <a class="nav-link" href="{{ '/高中/必修/' | relative_url }}"><span>必修</span></a>
+        <a class="nav-link" href="{{ '/高中/选修/' | relative_url }}"><span>选修</span></a>
       </div>
     </details>
   </aside>
