@@ -5,6 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
   <meta name="description" content="{{ page.description | default: site.description | escape }}">
+  <script>
+    (function () {
+      try {
+        var storedTheme = localStorage.getItem('theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = storedTheme === 'dark' || storedTheme === 'light' ? storedTheme : (prefersDark ? 'dark' : 'light');
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+      } catch (error) {
+        document.documentElement.dataset.theme = 'light';
+      }
+    }());
+  </script>
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 <body class="{% if page.home %}is-home{% else %}is-doc{% endif %}">
@@ -22,12 +35,28 @@
           <small>人教版小学、初中、高中英语词表</small>
         </span>
       </a>
-      <nav class="topnav" aria-label="主导航">
-        <a class="{% if page.url contains '/小学/' %}is-active{% endif %}" href="{{ '/小学/' | relative_url }}">小学</a>
-        <a class="{% if page.url contains '/初中/' %}is-active{% endif %}" href="{{ '/初中/' | relative_url }}">初中</a>
-        <a class="{% if page.url contains '/高中/' %}is-active{% endif %}" href="{{ '/高中/' | relative_url }}">高中</a>
-        <a href="{{ '/#vocab-search' | relative_url }}">搜索</a>
-      </nav>
+      <div class="header-actions">
+        <nav class="topnav" aria-label="主导航">
+          <a class="{% if page.url contains '/小学/' %}is-active{% endif %}" href="{{ '/小学/' | relative_url }}">小学</a>
+          <a class="{% if page.url contains '/初中/' %}is-active{% endif %}" href="{{ '/初中/' | relative_url }}">初中</a>
+          <a class="{% if page.url contains '/高中/' %}is-active{% endif %}" href="{{ '/高中/' | relative_url }}">高中</a>
+          <a href="{{ '/#vocab-search' | relative_url }}">搜索</a>
+        </nav>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换到暗黑模式" aria-pressed="false">
+          <span class="theme-icon theme-icon-sun" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="presentation">
+              <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M12 2.8v2.4m0 13.6v2.4M4.9 4.9l1.7 1.7m10.8 10.8 1.7 1.7M2.8 12h2.4m13.6 0h2.4M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.7"/>
+            </svg>
+          </span>
+          <span class="theme-icon theme-icon-moon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="presentation">
+              <path d="M19.1 14.7A7.9 7.9 0 0 1 9.3 4.9 8 8 0 1 0 19.1 14.7z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.7"/>
+            </svg>
+          </span>
+          <span class="theme-label" data-theme-label>白色</span>
+        </button>
+      </div>
     </header>
 
     <main class="page-main{% if page.home %} page-main-home{% endif %}">

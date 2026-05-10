@@ -1,4 +1,76 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const root = document.documentElement;
+  const themeToggle = document.querySelector('[data-theme-toggle]');
+  const themeLabel = themeToggle?.querySelector('[data-theme-label]');
+  const mediaQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+
+  const getStoredTheme = () => {
+    try {
+      const theme = localStorage.getItem('theme');
+      return theme === 'dark' || theme === 'light' ? theme : null;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const getSystemTheme = () => (mediaQuery?.matches ? 'dark' : 'light');
+
+  const updateThemeButton = () => {
+    if (!themeToggle) {
+      return;
+    }
+
+    const theme = root.dataset.theme === 'dark' ? 'dark' : 'light';
+    const nextLabel = theme === 'dark' ? '白色' : '暗黑';
+    themeToggle.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+    themeToggle.setAttribute('aria-label', `切换到${nextLabel}模式`);
+    themeToggle.title = `切换到${nextLabel}模式`;
+
+    if (themeLabel) {
+      themeLabel.textContent = theme === 'dark' ? '暗黑' : '白色';
+    }
+  };
+
+  const applyTheme = (theme, persist = false) => {
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+
+    if (persist) {
+      try {
+        localStorage.setItem('theme', theme);
+      } catch (error) {
+        // Browsers can block storage in private contexts; the visual toggle should still work.
+      }
+    }
+
+    updateThemeButton();
+  };
+
+  const initialTheme = root.dataset.theme === 'dark' || root.dataset.theme === 'light'
+    ? root.dataset.theme
+    : getStoredTheme() || getSystemTheme();
+
+  applyTheme(initialTheme);
+
+  themeToggle?.addEventListener('click', () => {
+    const nextTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    applyTheme(nextTheme, true);
+  });
+
+  if (mediaQuery?.addEventListener) {
+    mediaQuery.addEventListener('change', (event) => {
+      if (!getStoredTheme()) {
+        applyTheme(event.matches ? 'dark' : 'light');
+      }
+    });
+  } else if (mediaQuery?.addListener) {
+    mediaQuery.addListener((event) => {
+      if (!getStoredTheme()) {
+        applyTheme(event.matches ? 'dark' : 'light');
+      }
+    });
+  }
+
   const dataEl = document.getElementById('home-data');
   const table = document.querySelector('[data-vocab-table]');
   const detail = document.querySelector('[data-detail]');
