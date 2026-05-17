@@ -1,18 +1,67 @@
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.documentElement;
+  const body = document.body;
+  const pageKind = body?.dataset.pageKind || 'doc';
   const themeToggle = document.querySelector('[data-theme-toggle]');
   const mediaQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  const storagePrefix = 'english-words:study:';
 
-  const getStoredTheme = () => {
+  const normalize = (value) => String(value ?? '').replace(/\s+/g, ' ').trim();
+
+  const escapeHtml = (value) => String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
+  const stripMd = (value) => normalize(value).replace(/\.md$/i, '');
+
+  const safeGet = (key) => {
     try {
-      const theme = localStorage.getItem('theme');
-      return theme === 'dark' || theme === 'light' ? theme : null;
+      return localStorage.getItem(key);
     } catch (error) {
       return null;
     }
   };
 
-  const getSystemTheme = () => (mediaQuery?.matches ? 'dark' : 'light');
+  const safeSet = (key, value) => {
+    try {
+      localStorage.setItem(key, value);
+    } catch (error) {
+      // Storage can be blocked; the UI should still work.
+    }
+  };
+
+  const safeKeys = () => {
+    try {
+      return Array.from({ length: localStorage.length }, (_, index) => localStorage.key(index)).filter(Boolean);
+    } catch (error) {
+      return [];
+    }
+  };
+
+  const parseJson = (value) => {
+    try {
+      return JSON.parse(value);
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const addHash = (href, hash) => {
+    if (!href) {
+      return `#${hash}`;
+    }
+
+    try {
+      const url = new URL(href, window.location.href);
+      url.hash = hash;
+      return url.toString();
+    } catch (error) {
+      return `${href.split('#')[0]}#${hash}`;
+    }
+  };
 
   const updateThemeButton = () => {
     if (!themeToggle) {
@@ -20,10 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const theme = root.dataset.theme === 'dark' ? 'dark' : 'light';
-    const nextLabel = theme === 'dark' ? '白色' : '暗黑';
+    const nextTheme = theme === 'dark' ? '白色' : '暗黑';
     themeToggle.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
-    themeToggle.setAttribute('aria-label', `切换到${nextLabel}模式`);
-    themeToggle.title = `切换到${nextLabel}模式`;
+    themeToggle.setAttribute('aria-label', `切换到${nextTheme}模式`);
+    themeToggle.title = `切换到${nextTheme}模式`;
   };
 
   const applyTheme = (theme, persist = false) => {
@@ -31,19 +80,19 @@ document.addEventListener('DOMContentLoaded', () => {
     root.style.colorScheme = theme;
 
     if (persist) {
-      try {
-        localStorage.setItem('theme', theme);
-      } catch (error) {
-        // Browsers can block storage in private contexts; the visual toggle should still work.
-      }
+      safeSet('theme', theme);
     }
 
     updateThemeButton();
   };
 
+  const storedTheme = safeGet('theme');
+  const systemTheme = mediaQuery?.matches ? 'dark' : 'light';
   const initialTheme = root.dataset.theme === 'dark' || root.dataset.theme === 'light'
     ? root.dataset.theme
-    : getStoredTheme() || getSystemTheme();
+    : storedTheme === 'dark' || storedTheme === 'light'
+      ? storedTheme
+      : systemTheme;
 
   applyTheme(initialTheme);
 
@@ -52,131 +101,376 @@ document.addEventListener('DOMContentLoaded', () => {
     applyTheme(nextTheme, true);
   });
 
+  const onSystemThemeChange = (event) => {
+    const currentStoredTheme = safeGet('theme');
+    if (!currentStoredTheme) {
+      applyTheme(event.matches ? 'dark' : 'light');
+    }
+  };
+
   if (mediaQuery?.addEventListener) {
-    mediaQuery.addEventListener('change', (event) => {
-      if (!getStoredTheme()) {
-        applyTheme(event.matches ? 'dark' : 'light');
-      }
-    });
+    mediaQuery.addEventListener('change', onSystemThemeChange);
   } else if (mediaQuery?.addListener) {
-    mediaQuery.addListener((event) => {
-      if (!getStoredTheme()) {
-        applyTheme(event.matches ? 'dark' : 'light');
-      }
-    });
+    mediaQuery.addListener(onSystemThemeChange);
   }
 
-  const dataEl = document.getElementById('home-data');
-  const table = document.querySelector('[data-vocab-table]');
-  const detail = document.querySelector('[data-detail]');
-  const search = document.getElementById('vocab-search');
-  const visibleCount = document.getElementById('visible-count');
-  const totalCount = document.getElementById('total-count');
-  const emptyState = document.getElementById('table-empty');
-  const fullListUrl = detail?.dataset.fullListUrl || '#';
+  const listStudyStates = () => {
+    return safeKeys()
+      .filter((key) => key.startsWith(storagePrefix))
+      .map((key) => parseJson(safeGet(key)))
+      .filter(Boolean)
+      .sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+  };
 
-  if (!dataEl || !table || !detail) {
-    return;
-  }
-
-  const data = JSON.parse(dataEl.textContent);
-  const rows = Array.from(table.querySelectorAll('tbody tr[data-index]'));
-  const rowData = data.rows || [];
-  let activeIndex = 0;
-
-  const esc = (value) => String(value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-
-  const speaker = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 7 7.5 10H5v4h2.5L11 17V7z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"></path><path d="M14.5 9.5a3.8 3.8 0 0 1 0 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path><path d="M16.8 7.2a7 7 0 0 1 0 9.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg>';
-
-  const renderDetail = (entry) => {
-    if (!entry) {
+  const renderResumePanel = () => {
+    const panel = document.getElementById('resume-panel');
+    if (!panel) {
       return;
     }
 
-    detail.innerHTML = `
-      <div class="detail-head">
-        <div>
-          <div class="detail-wordline">
-            <h2>${esc(entry.word)}</h2>
-            <span class="detail-speaker" aria-hidden="true">${speaker}</span>
-          </div>
-          <div class="detail-phonetic">UK <span>${esc(entry.uk)}</span></div>
-          <div class="detail-phonetic">US <span>${esc(entry.us)}</span></div>
+    const latest = listStudyStates()[0];
+    if (!latest) {
+      panel.hidden = true;
+      return;
+    }
+
+    const pending = Array.isArray(latest.queue) ? latest.queue.length : Number(latest.remaining || 0);
+    const mastered = Number(latest.mastered || 0);
+    const review = Number(latest.review || 0);
+    const href = addHash(latest.url || '#', 'study');
+
+    panel.hidden = false;
+    panel.innerHTML = `
+      <div class="resume-card">
+        <div class="resume-card__copy">
+          <p class="resume-card__eyebrow">继续上次学习</p>
+          <h2>${escapeHtml(stripMd(latest.title || '最近词表'))}</h2>
+          <p>${pending} 个待学 · ${mastered} 个已掌握 · ${review} 个需复习</p>
         </div>
-        <div class="detail-meta">
-          <span>${esc(entry.detail)}</span>
-          <ul class="tag-list">${(entry.tags || []).map((tag) => `<li>${esc(tag)}</li>`).join('')}</ul>
-        </div>
+        <a class="action-button" href="${escapeHtml(href)}">继续学习</a>
       </div>
-      <section class="detail-examples">
-        <h3>例句 <small>(${(entry.examples || []).length})</small></h3>
-        <ol class="example-list">
-          ${(entry.examples || []).map((example) => `
-            <li>
-              <div class="example-en">${esc(example.en)} <span class="example-speaker" aria-hidden="true">${speaker}</span></div>
-              <div class="example-zh">${esc(example.zh)}</div>
-            </li>
-          `).join('')}
-        </ol>
-      </section>
-      <a class="action-button detail-action" href="${esc(fullListUrl)}">查看完整词表</a>
     `;
   };
 
-  const setActive = (index) => {
-    activeIndex = index;
-    rows.forEach((row) => row.classList.toggle('is-active', Number(row.dataset.index) === index));
-    renderDetail(rowData[index]);
+  const enhanceCategoryPage = () => {
+    const markdown = document.querySelector('.markdown-body');
+    const table = markdown?.querySelector('table');
+    if (!markdown || !table) {
+      return;
+    }
+
+    const headerCells = Array.from(table.querySelectorAll('thead th'));
+    const headers = headerCells.map((cell) => normalize(cell.textContent));
+    const rows = Array.from(table.querySelectorAll('tbody tr'));
+    if (!rows.length) {
+      return;
+    }
+
+    const fileIndex = headers.findIndex((header) => /文件|词表|单词/.test(header));
+    if (fileIndex < 0) {
+      return;
+    }
+
+    const wrapper = document.createElement('section');
+    wrapper.className = 'catalog-section';
+
+    const intro = document.createElement('div');
+    intro.className = 'catalog-section__intro';
+    intro.innerHTML = `
+      <p class="eyebrow">分类首页</p>
+      <h2>选择一本教材后开始学习</h2>
+    `;
+
+    const grid = document.createElement('div');
+    grid.className = 'catalog-grid catalog-grid--category';
+
+    rows.forEach((row) => {
+      const cells = Array.from(row.querySelectorAll('td'));
+      const fileCell = cells[fileIndex] || cells[0];
+      const primaryLink = fileCell?.querySelector('a') || row.querySelector('a');
+      if (!primaryLink) {
+        return;
+      }
+
+      const title = stripMd(primaryLink.textContent || fileCell?.textContent || '');
+      const eyebrow = fileIndex > 0 ? normalize(cells[0]?.textContent) : '';
+      const meta = cells
+        .map((cell, index) => {
+          if (index === fileIndex || (fileIndex > 0 && index === 0)) {
+            return '';
+          }
+          return normalize(cell.textContent);
+        })
+        .filter(Boolean);
+      const browseHref = primaryLink.href;
+      const studyHref = addHash(browseHref, 'study');
+
+      const card = document.createElement('article');
+      card.className = 'catalog-card';
+      card.innerHTML = `
+        ${eyebrow ? `<div class="catalog-card__eyebrow">${escapeHtml(eyebrow)}</div>` : ''}
+        <h3 class="catalog-card__title">${escapeHtml(title)}</h3>
+        ${meta.length ? `<div class="catalog-card__meta">${meta.map((item) => `<span>${escapeHtml(item)}</span>`).join('')}</div>` : ''}
+        <div class="catalog-card__actions">
+          <a class="button-secondary" href="${escapeHtml(browseHref)}">浏览词表</a>
+          <a class="action-button" href="${escapeHtml(studyHref)}">开始学习</a>
+        </div>
+      `;
+
+      grid.appendChild(card);
+    });
+
+    table.insertAdjacentElement('beforebegin', wrapper);
+    wrapper.appendChild(intro);
+    wrapper.appendChild(grid);
+    table.remove();
   };
 
-  const updateCounts = () => {
-    const visible = rows.filter((row) => !row.hidden).length;
-    if (visibleCount) {
-      visibleCount.textContent = String(visible);
+  const enhanceVocabPage = () => {
+    const markdown = document.querySelector('.markdown-body');
+    if (!markdown) {
+      return;
     }
-    if (totalCount) {
-      totalCount.textContent = String(rows.length);
+
+    const tables = Array.from(markdown.querySelectorAll('table'));
+    const table = tables.find((candidate) => {
+      const headers = Array.from(candidate.querySelectorAll('thead th')).map((cell) => normalize(cell.textContent));
+      return headers.some((header) => header.includes('单词')) && headers.some((header) => header.includes('中文'));
+    });
+
+    if (!table) {
+      return;
     }
-    if (emptyState) {
-      emptyState.hidden = visible !== 0;
+
+    const headers = Array.from(table.querySelectorAll('thead th')).map((cell) => normalize(cell.textContent));
+    const pickIndex = (matcher) => headers.findIndex(matcher);
+    const indexMap = {
+      word: pickIndex((header) => header === '单词' || header.includes('单词')),
+      uk: pickIndex((header) => header.includes('英式')),
+      us: pickIndex((header) => header.includes('美式')),
+      zh: pickIndex((header) => header.includes('中文翻译') || (header.includes('中文') && !header.includes('例句'))),
+      example: pickIndex((header) => header === '例句' || (header.includes('例句') && !header.includes('翻译'))),
+      translation: pickIndex((header) => header.includes('例句翻译') || header === '翻译'),
+    };
+
+    if (indexMap.word < 0 || indexMap.zh < 0) {
+      return;
+    }
+
+    const deck = Array.from(table.querySelectorAll('tbody tr'))
+      .map((row, index) => {
+        const cells = Array.from(row.querySelectorAll('td'));
+        const read = (cellIndex) => normalize(cells[cellIndex]?.textContent);
+        const entry = {
+          no: read(0) || String(index + 1),
+          word: read(indexMap.word),
+          uk: read(indexMap.uk),
+          us: read(indexMap.us),
+          zh: read(indexMap.zh),
+          example: read(indexMap.example),
+          translation: read(indexMap.translation),
+        };
+
+        return entry;
+      })
+      .filter((entry) => entry.word);
+
+    if (!deck.length) {
+      return;
+    }
+
+    const deckTitle = normalize(markdown.querySelector('h1')?.textContent || document.title);
+    const deckUrl = window.location.href.split('#')[0];
+    const storageKey = `${storagePrefix}${deckUrl}`;
+    const defaultState = () => ({
+      queue: deck.map((_, index) => index),
+      mastered: 0,
+      review: 0,
+      revealed: false,
+      updatedAt: Date.now(),
+      title: deckTitle,
+      url: deckUrl,
+      total: deck.length,
+    });
+
+    const savedState = parseJson(safeGet(storageKey));
+    const state = savedState && Array.isArray(savedState.queue) && savedState.total === deck.length
+      ? {
+          queue: savedState.queue.filter((value) => Number.isInteger(value) && value >= 0 && value < deck.length),
+          mastered: Number(savedState.mastered || 0),
+          review: Number(savedState.review || 0),
+          revealed: Boolean(savedState.revealed),
+          updatedAt: Number(savedState.updatedAt || Date.now()),
+          title: deckTitle,
+          url: deckUrl,
+          total: deck.length,
+        }
+      : defaultState();
+
+    const studyShell = document.createElement('section');
+    studyShell.className = 'study-shell';
+    studyShell.id = 'study';
+    studyShell.setAttribute('tabindex', '-1');
+    studyShell.innerHTML = `
+      <div class="study-shell__top">
+        <div class="study-shell__heading">
+          <p class="eyebrow">开始学习</p>
+          <h2>${escapeHtml(deckTitle)}</h2>
+        </div>
+        <div class="study-shell__meta">
+          <span data-study-progress></span>
+        </div>
+      </div>
+      <div class="study-shell__card">
+        <div class="study-shell__word" data-study-word></div>
+        <div class="study-shell__phonetics">
+          <span data-study-uk></span>
+          <span data-study-us></span>
+        </div>
+        <div class="study-shell__answer" data-study-answer hidden>
+          <p class="study-shell__zh" data-study-zh></p>
+          <p class="study-shell__example" data-study-example></p>
+          <p class="study-shell__translation" data-study-translation></p>
+        </div>
+        <div class="study-shell__actions">
+          <button class="button-secondary" type="button" data-study-reveal>显示释义</button>
+          <button class="ghost-button" type="button" data-study-reset>重置</button>
+          <button class="button-secondary" type="button" data-study-hard>不熟</button>
+          <button class="action-button" type="button" data-study-known>掌握</button>
+        </div>
+        <div class="study-shell__stats" data-study-stats></div>
+      </div>
+    `;
+
+    table.insertAdjacentElement('beforebegin', studyShell);
+
+    const nodes = {
+      progress: studyShell.querySelector('[data-study-progress]'),
+      word: studyShell.querySelector('[data-study-word]'),
+      uk: studyShell.querySelector('[data-study-uk]'),
+      us: studyShell.querySelector('[data-study-us]'),
+      answer: studyShell.querySelector('[data-study-answer]'),
+      zh: studyShell.querySelector('[data-study-zh]'),
+      example: studyShell.querySelector('[data-study-example]'),
+      translation: studyShell.querySelector('[data-study-translation]'),
+      reveal: studyShell.querySelector('[data-study-reveal]'),
+      reset: studyShell.querySelector('[data-study-reset]'),
+      hard: studyShell.querySelector('[data-study-hard]'),
+      known: studyShell.querySelector('[data-study-known]'),
+      stats: studyShell.querySelector('[data-study-stats]'),
+    };
+
+    const persistState = () => {
+      state.updatedAt = Date.now();
+      state.title = deckTitle;
+      state.url = deckUrl;
+      state.total = deck.length;
+      safeSet(storageKey, JSON.stringify(state));
+    };
+
+    const render = () => {
+      const currentIndex = state.queue[0];
+      const current = deck[currentIndex];
+      const completed = state.queue.length === 0;
+      const progressText = `${Math.min(deck.length - state.queue.length, deck.length)}/${deck.length}`;
+
+      nodes.progress.textContent = progressText;
+      nodes.stats.textContent = completed
+        ? `已掌握 ${state.mastered} · 需复习 ${state.review}`
+        : `已掌握 ${state.mastered} · 需复习 ${state.review}`;
+
+      if (!current) {
+        nodes.word.textContent = '完成本轮';
+        nodes.uk.textContent = '';
+        nodes.us.textContent = '';
+        nodes.answer.hidden = false;
+        nodes.zh.textContent = '当前词表已学完。';
+        nodes.example.textContent = '点击“重置”重新开始。';
+        nodes.translation.textContent = '';
+        nodes.reveal.disabled = true;
+        nodes.hard.disabled = true;
+        nodes.known.disabled = true;
+        nodes.reveal.textContent = '显示释义';
+        return;
+      }
+
+      nodes.word.textContent = current.word;
+      nodes.uk.textContent = current.uk ? `UK ${current.uk}` : '';
+      nodes.us.textContent = current.us ? `US ${current.us}` : '';
+      nodes.answer.hidden = !state.revealed;
+      nodes.zh.textContent = current.zh;
+      nodes.example.textContent = current.example ? current.example : ' ';
+      nodes.translation.textContent = current.translation ? current.translation : ' ';
+      nodes.reveal.disabled = false;
+      nodes.hard.disabled = false;
+      nodes.known.disabled = false;
+      nodes.reveal.textContent = state.revealed ? '收起释义' : '显示释义';
+    };
+
+    const revealAnswer = () => {
+      if (!state.queue.length) {
+        return;
+      }
+      state.revealed = !state.revealed;
+      persistState();
+      render();
+    };
+
+    const resetStudy = () => {
+      state.queue = deck.map((_, index) => index);
+      state.mastered = 0;
+      state.review = 0;
+      state.revealed = false;
+      persistState();
+      render();
+      studyShell.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    const markKnown = () => {
+      if (!state.queue.length) {
+        return;
+      }
+
+      state.queue.shift();
+      state.mastered += 1;
+      state.revealed = false;
+      persistState();
+      render();
+    };
+
+    const markHard = () => {
+      if (!state.queue.length) {
+        return;
+      }
+
+      const current = state.queue.shift();
+      state.queue.push(current);
+      state.review += 1;
+      state.revealed = false;
+      persistState();
+      render();
+    };
+
+    nodes.reveal.addEventListener('click', revealAnswer);
+    nodes.reset.addEventListener('click', resetStudy);
+    nodes.hard.addEventListener('click', markHard);
+    nodes.known.addEventListener('click', markKnown);
+
+    render();
+    persistState();
+
+    if (window.location.hash === '#study') {
+      requestAnimationFrame(() => {
+        studyShell.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
     }
   };
 
-  rows.forEach((row) => {
-    const index = Number(row.dataset.index);
-    row.addEventListener('click', () => setActive(index));
-    row.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        setActive(index);
-      }
-    });
-  });
-
-  search?.addEventListener('input', () => {
-    const query = search.value.trim().toLowerCase();
-    let firstVisible = -1;
-
-    rows.forEach((row, index) => {
-      const text = row.textContent.toLowerCase();
-      const match = !query || text.includes(query);
-      row.hidden = !match;
-      if (match && firstVisible === -1) {
-        firstVisible = index;
-      }
-    });
-
-    updateCounts();
-    if (firstVisible !== -1) {
-      setActive(firstVisible);
-    }
-  });
-
-  updateCounts();
-  setActive(activeIndex);
+  if (pageKind === 'home') {
+    renderResumePanel();
+  } else if (pageKind === 'category') {
+    enhanceCategoryPage();
+  } else if (pageKind === 'vocab') {
+    enhanceVocabPage();
+  }
 });

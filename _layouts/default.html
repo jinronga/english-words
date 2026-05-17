@@ -20,7 +20,19 @@
   </script>
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
-<body class="{% if page.home %}is-home{% else %}is-doc{% endif %}">
+{% assign page_kind = 'doc' %}
+{% if page.home %}
+  {% assign page_kind = 'home' %}
+{% elsif page.name == 'README.md' %}
+  {% if page.url contains '.html' %}
+    {% assign page_kind = 'doc' %}
+  {% else %}
+    {% assign page_kind = 'category' %}
+  {% endif %}
+{% else %}
+  {% assign page_kind = 'vocab' %}
+{% endif %}
+<body class="page-kind-{{ page_kind }}" data-page-kind="{{ page_kind }}">
   <div class="site-shell">
     <header class="topbar">
       <a class="brand" href="{{ '/' | relative_url }}" aria-label="返回首页">
@@ -32,15 +44,15 @@
         </span>
         <span class="brand-text">
           <strong>{{ site.title }}</strong>
-          <small>人教版小学、初中、高中英语词表</small>
+          <small>按学段和教材册次进入学习</small>
         </span>
       </a>
       <div class="header-actions">
         <nav class="topnav" aria-label="主导航">
+          <a class="{% if page.home %}is-active{% endif %}" href="{{ '/' | relative_url }}">首页</a>
           <a class="{% if page.url contains '/小学/' %}is-active{% endif %}" href="{{ '/小学/' | relative_url }}">小学</a>
           <a class="{% if page.url contains '/初中/' %}is-active{% endif %}" href="{{ '/初中/' | relative_url }}">初中</a>
           <a class="{% if page.url contains '/高中/' %}is-active{% endif %}" href="{{ '/高中/' | relative_url }}">高中</a>
-          <a href="{{ '/#vocab-search' | relative_url }}">搜索</a>
         </nav>
         <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换到暗黑模式" aria-pressed="false">
           <span class="theme-icon theme-icon-sun" aria-hidden="true">
