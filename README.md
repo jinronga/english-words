@@ -82,11 +82,10 @@ python3 scripts/generate_cet_vocab.py
 本仓库已补充 GitHub Pages 配置和词典式首页界面：
 
 - `_config.yml`：Jekyll 站点配置，并启用 Markdown 相对链接转换
-- `_layouts/default.html`：自定义站点布局，包含顶部导航和统一页面骨架
-- `index.md`：词典式首页，包含教材目录、词表预览、搜索和单词详情
-- `_data/home_demo.json`：首页示例词条数据
-- `assets/css/style.scss`：实现三栏布局、表格、详情面板和移动端响应式样式
-- `assets/js/home.js`：实现首页搜索和选中词条详情切换
+- `_layouts/default.html`：自定义站点布局，包含顶部导航、主题切换和页面类型标记
+- `index.md`：学习入口首页，先按小学、初中、高中、四级、六级进入分类页
+- `assets/css/style.scss`：实现简约入口卡片、学习卡片、表格和移动端响应式样式
+- `assets/js/home.js`：实现黑白主题、分类页入口增强、词表页学习模式和本地学习进度
 
 发布方式：
 
