@@ -32,7 +32,7 @@
         </span>
         <span class="brand-text">
           <strong>{{ site.title }}</strong>
-          <small>人教版小学、初中、高中英语词表</small>
+          <small>教材词表与四六级英语词汇</small>
         </span>
       </a>
       <div class="header-actions">
@@ -40,6 +40,8 @@
           <a class="{% if page.url contains '/小学/' %}is-active{% endif %}" href="{{ '/小学/' | relative_url }}">小学</a>
           <a class="{% if page.url contains '/初中/' %}is-active{% endif %}" href="{{ '/初中/' | relative_url }}">初中</a>
           <a class="{% if page.url contains '/高中/' %}is-active{% endif %}" href="{{ '/高中/' | relative_url }}">高中</a>
+          <a class="{% if page.url contains '/四级/' %}is-active{% endif %}" href="{{ '/四级/' | relative_url }}">四级</a>
+          <a class="{% if page.url contains '/六级/' %}is-active{% endif %}" href="{{ '/六级/' | relative_url }}">六级</a>
           <a href="{{ '/#vocab-search' | relative_url }}">搜索</a>
         </nav>
         <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换到暗黑模式" aria-pressed="false">

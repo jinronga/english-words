@@ -1,17 +1,17 @@
 ---
 title: 英语单词整理
-description: 人教版小学、初中、高中英语单词表首页
+description: 人教版小学、初中、高中与四级、六级英语词表首页
 home: true
 ---
 
 <section class="intro-strip">
-  <p class="intro-text">按教材册次整理单词、音标、例句与中文翻译。</p>
+  <p class="intro-text">按教材册次与考试分类整理单词、音标、例句与中文翻译。</p>
   <div class="metric-grid" aria-label="站点统计">
     <div class="metric">
       <span class="metric-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24"><path d="M6 5.5h8.5a3 3 0 0 1 3 3V19H9a3 3 0 0 0-3-3z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 8.5h8m-8 3h8m-8 3h5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
       </span>
-      <div><strong>6373</strong><span>词条</span></div>
+      <div><strong>19532</strong><span>词条</span></div>
     </div>
     <div class="metric">
       <span class="metric-icon" aria-hidden="true">
@@ -68,6 +68,14 @@ home: true
         <a class="nav-link" href="{{ '/高中/' | relative_url }}"><span>高中总览</span></a>
         <a class="nav-link" href="{{ '/高中/必修/' | relative_url }}"><span>必修</span></a>
         <a class="nav-link" href="{{ '/高中/选修/' | relative_url }}"><span>选修</span></a>
+      </div>
+    </details>
+
+    <details class="nav-group">
+      <summary>考试词汇表</summary>
+      <div class="nav-list">
+        <a class="nav-link" href="{{ '/四级/' | relative_url }}"><span>四级词汇</span></a>
+        <a class="nav-link" href="{{ '/六级/' | relative_url }}"><span>六级词汇</span></a>
       </div>
     </details>
   </aside>
