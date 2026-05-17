@@ -44,7 +44,7 @@
         </span>
         <span class="brand-text">
           <strong>{{ site.title }}</strong>
-          <small>按学段和教材册次进入学习</small>
+          <small>按学段、教材册次与四六级进入学习</small>
         </span>
       </a>
       <div class="header-actions">
@@ -53,6 +53,8 @@
           <a class="{% if page.url contains '/小学/' %}is-active{% endif %}" href="{{ '/小学/' | relative_url }}">小学</a>
           <a class="{% if page.url contains '/初中/' %}is-active{% endif %}" href="{{ '/初中/' | relative_url }}">初中</a>
           <a class="{% if page.url contains '/高中/' %}is-active{% endif %}" href="{{ '/高中/' | relative_url }}">高中</a>
+          <a class="{% if page.url contains '/四级/' %}is-active{% endif %}" href="{{ '/四级/' | relative_url }}">四级</a>
+          <a class="{% if page.url contains '/六级/' %}is-active{% endif %}" href="{{ '/六级/' | relative_url }}">六级</a>
         </nav>
         <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换到暗黑模式" aria-pressed="false">
           <span class="theme-icon theme-icon-sun" aria-hidden="true">

@@ -1,6 +1,6 @@
 ---
 title: 英语单词整理
-description: 按学段进入分类首页，再点开始学习。
+description: 按学段和考试分类进入首页，再点开始学习。
 home: true
 ---
 
@@ -8,19 +8,19 @@ home: true
   <div class="home-hero__copy">
     <p class="eyebrow">Markdown 词库 · GitHub Pages · 黑白主题</p>
     <h1>英语单词整理</h1>
-    <p>先选学段，再进入分类首页，最后点开始学习。</p>
+    <p>先选学段或考试分类，再进入分类首页，最后点开始学习。</p>
   </div>
   <div class="home-hero__stats" aria-label="站点概览">
     <div class="hero-stat">
-      <strong>3</strong>
-      <span>学段入口</span>
+      <strong>5</strong>
+      <span>分类入口</span>
     </div>
     <div class="hero-stat">
-      <strong>22</strong>
+      <strong>24</strong>
       <span>词表文件</span>
     </div>
     <div class="hero-stat">
-      <strong>6373</strong>
+      <strong>19532</strong>
       <span>词条</span>
     </div>
   </div>
@@ -28,7 +28,7 @@ home: true
 
 <section class="resume-strip" id="resume-panel" hidden></section>
 
-<section class="catalog-grid home-grid" aria-label="学段入口">
+<section class="catalog-grid home-grid" aria-label="学段与考试分类入口">
   <article class="catalog-card catalog-card--primary">
     <div class="catalog-card__eyebrow">小学</div>
     <h2 class="catalog-card__title">三年级到六年级</h2>
@@ -65,6 +65,32 @@ home: true
     </div>
     <div class="catalog-card__actions">
       <a class="action-button" href="{{ '/高中/' | relative_url }}">进入分类</a>
+    </div>
+  </article>
+
+  <article class="catalog-card catalog-card--primary">
+    <div class="catalog-card__eyebrow">四级</div>
+    <h2 class="catalog-card__title">CET-4 核心词汇</h2>
+    <p class="catalog-card__copy">适合大学英语四级备考，先浏览词表再进入学习模式。</p>
+    <div class="catalog-card__meta">
+      <span>1 本词表</span>
+      <span>7508 词</span>
+    </div>
+    <div class="catalog-card__actions">
+      <a class="action-button" href="{{ '/四级/' | relative_url }}">进入分类</a>
+    </div>
+  </article>
+
+  <article class="catalog-card catalog-card--primary">
+    <div class="catalog-card__eyebrow">六级</div>
+    <h2 class="catalog-card__title">CET-6 扩展词汇</h2>
+    <p class="catalog-card__copy">适合大学英语六级备考，保留中文释义并支持学习进度。</p>
+    <div class="catalog-card__meta">
+      <span>1 本词表</span>
+      <span>5651 词</span>
+    </div>
+    <div class="catalog-card__actions">
+      <a class="action-button" href="{{ '/六级/' | relative_url }}">进入分类</a>
     </div>
   </article>
 </section>
