@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
       word: pickIndex((header) => header === '单词' || header.includes('单词')),
       uk: pickIndex((header) => header.includes('英式')),
       us: pickIndex((header) => header.includes('美式')),
-      zh: pickIndex((header) => header.includes('中文翻译') || (header.includes('中文') && !header.includes('例句'))),
+      zh: pickIndex((header) => header.includes('中文翻译') || header.includes('释义') || (header.includes('中文') && !header.includes('例句'))),
       example: pickIndex((header) => header === '例句' || (header.includes('例句') && !header.includes('翻译'))),
       translation: pickIndex((header) => header.includes('例句翻译') || header === '翻译'),
     };
