@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
       queue: deck.map((_, index) => index),
       mastered: 0,
       review: 0,
-      revealed: false,
+      revealed: true,
       updatedAt: Date.now(),
       title: deckTitle,
       url: deckUrl,
@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
           queue: savedState.queue.filter((value) => Number.isInteger(value) && value >= 0 && value < deck.length),
           mastered: Number(savedState.mastered || 0),
           review: Number(savedState.review || 0),
-          revealed: Boolean(savedState.revealed),
+          revealed: window.location.hash === '#study' ? true : Boolean(savedState.revealed),
           updatedAt: Number(savedState.updatedAt || Date.now()),
           title: deckTitle,
           url: deckUrl,
@@ -420,7 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
       state.queue = deck.map((_, index) => index);
       state.mastered = 0;
       state.review = 0;
-      state.revealed = false;
+      state.revealed = true;
       persistState();
       render();
       studyShell.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       state.queue.shift();
       state.mastered += 1;
-      state.revealed = false;
+      state.revealed = true;
       persistState();
       render();
     };
@@ -446,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const current = state.queue.shift();
       state.queue.push(current);
       state.review += 1;
-      state.revealed = false;
+      state.revealed = true;
       persistState();
       render();
     };
