@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
       word: pickIndex((header) => header === '单词' || header.includes('单词')),
       uk: pickIndex((header) => header.includes('英式')),
       us: pickIndex((header) => header.includes('美式')),
-      zh: pickIndex((header) => header.includes('中文翻译') || (header.includes('中文') && !header.includes('例句'))),
+      zh: pickIndex((header) => header.includes('中文翻译') || header.includes('释义') || (header.includes('中文') && !header.includes('例句'))),
       example: pickIndex((header) => header === '例句' || (header.includes('例句') && !header.includes('翻译'))),
       translation: pickIndex((header) => header.includes('例句翻译') || header === '翻译'),
     };
@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
       queue: deck.map((_, index) => index),
       mastered: 0,
       review: 0,
-      revealed: false,
+      revealed: true,
       updatedAt: Date.now(),
       title: deckTitle,
       url: deckUrl,
@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
           queue: savedState.queue.filter((value) => Number.isInteger(value) && value >= 0 && value < deck.length),
           mastered: Number(savedState.mastered || 0),
           review: Number(savedState.review || 0),
-          revealed: Boolean(savedState.revealed),
+          revealed: window.location.hash === '#study' ? true : Boolean(savedState.revealed),
           updatedAt: Number(savedState.updatedAt || Date.now()),
           title: deckTitle,
           url: deckUrl,
@@ -420,7 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
       state.queue = deck.map((_, index) => index);
       state.mastered = 0;
       state.review = 0;
-      state.revealed = false;
+      state.revealed = true;
       persistState();
       render();
       studyShell.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       state.queue.shift();
       state.mastered += 1;
-      state.revealed = false;
+      state.revealed = true;
       persistState();
       render();
     };
@@ -446,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const current = state.queue.shift();
       state.queue.push(current);
       state.review += 1;
-      state.revealed = false;
+      state.revealed = true;
       persistState();
       render();
     };
