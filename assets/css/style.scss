@@ -709,6 +709,45 @@ html[data-theme="dark"] .theme-icon-moon {
   gap: 10px;
 }
 
+.study-shell__speech {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.study-shell__accent {
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+}
+
+.study-shell__accent button {
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  min-height: 28px;
+  padding: 6px 12px;
+}
+
+.study-shell__accent button.is-active {
+  background: var(--blue);
+  color: var(--button-text);
+}
+
+.study-shell__accent button:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
 .study-shell__answer {
   background: var(--surface-soft);
   border-left: 3px solid var(--green);
@@ -1415,14 +1454,24 @@ html[data-theme="dark"] .theme-icon-moon {
   }
 
   .catalog-card__actions,
-  .study-shell__actions {
+  .study-shell__actions,
+  .study-shell__speech {
     flex-direction: column;
   }
 
   .catalog-card__actions a,
+  .study-shell__speech > button,
   .study-shell__actions button,
   .resume-card .action-button {
     width: 100%;
+  }
+
+  .study-shell__accent {
+    width: 100%;
+  }
+
+  .study-shell__accent button {
+    flex: 1;
   }
 
   .study-shell__word {
