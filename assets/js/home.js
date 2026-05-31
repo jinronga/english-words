@@ -282,6 +282,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const deckTitle = normalize(markdown.querySelector('h1')?.textContent || document.title);
     const deckUrl = window.location.href.split('#')[0];
     const storageKey = `${storagePrefix}${deckUrl}`;
+    const accentStorageKey = `${storagePrefix}pronunciation-accent`;
+    const speech = 'speechSynthesis' in window ? window.speechSynthesis : null;
+    let speechVoices = [];
+    let pronunciationAccent = safeGet(accentStorageKey) === 'uk' ? 'uk' : 'us';
     const defaultState = () => ({
       queue: deck.map((_, index) => index),
       mastered: 0,
@@ -327,6 +331,13 @@ document.addEventListener('DOMContentLoaded', () => {
           <span data-study-uk></span>
           <span data-study-us></span>
         </div>
+        <div class="study-shell__speech">
+          <div class="study-shell__accent" role="group" aria-label="选择发音">
+            <button type="button" data-study-accent="uk" aria-pressed="false">英式</button>
+            <button type="button" data-study-accent="us" aria-pressed="false">美式</button>
+          </div>
+          <button class="button-secondary" type="button" data-study-speak>播放发音</button>
+        </div>
         <div class="study-shell__answer" data-study-answer hidden>
           <p class="study-shell__zh" data-study-zh></p>
           <p class="study-shell__example" data-study-example></p>
@@ -349,6 +360,8 @@ document.addEventListener('DOMContentLoaded', () => {
       word: studyShell.querySelector('[data-study-word]'),
       uk: studyShell.querySelector('[data-study-uk]'),
       us: studyShell.querySelector('[data-study-us]'),
+      accents: Array.from(studyShell.querySelectorAll('[data-study-accent]')),
+      speak: studyShell.querySelector('[data-study-speak]'),
       answer: studyShell.querySelector('[data-study-answer]'),
       zh: studyShell.querySelector('[data-study-zh]'),
       example: studyShell.querySelector('[data-study-example]'),
@@ -368,6 +381,60 @@ document.addEventListener('DOMContentLoaded', () => {
       safeSet(storageKey, JSON.stringify(state));
     };
 
+    const loadSpeechVoices = () => {
+      if (!speech) {
+        return;
+      }
+
+      speechVoices = speech.getVoices();
+    };
+
+    const chooseSpeechVoice = (accent) => {
+      const targetLang = accent === 'uk' ? 'en-GB' : 'en-US';
+      const targetPrefix = targetLang.toLowerCase();
+      const exactVoice = speechVoices.find((voice) => voice.lang?.toLowerCase() === targetPrefix);
+      if (exactVoice) {
+        return exactVoice;
+      }
+
+      const namePattern = accent === 'uk' ? /british|uk|england|gb/i : /american|us|united states/i;
+      const namedVoice = speechVoices.find((voice) => (
+        voice.lang?.toLowerCase().startsWith('en') && namePattern.test(voice.name)
+      ));
+      if (namedVoice) {
+        return namedVoice;
+      }
+
+      return speechVoices.find((voice) => voice.lang?.toLowerCase().startsWith('en')) || null;
+    };
+
+    const speakCurrentWord = () => {
+      const current = deck[state.queue[0]];
+      if (!speech || !current?.word) {
+        return;
+      }
+
+      loadSpeechVoices();
+      const utterance = new SpeechSynthesisUtterance(current.word);
+      utterance.lang = pronunciationAccent === 'uk' ? 'en-GB' : 'en-US';
+      utterance.rate = 0.82;
+      utterance.pitch = 1;
+
+      const voice = chooseSpeechVoice(pronunciationAccent);
+      if (voice) {
+        utterance.voice = voice;
+      }
+
+      speech.cancel();
+      speech.speak(utterance);
+    };
+
+    const setPronunciationAccent = (accent) => {
+      pronunciationAccent = accent === 'uk' ? 'uk' : 'us';
+      safeSet(accentStorageKey, pronunciationAccent);
+      render();
+    };
+
     const render = () => {
       const currentIndex = state.queue[0];
       const current = deck[currentIndex];
@@ -383,6 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nodes.word.textContent = '完成本轮';
         nodes.uk.textContent = '';
         nodes.us.textContent = '';
+        nodes.speak.disabled = true;
         nodes.answer.hidden = false;
         nodes.zh.textContent = '当前词表已学完。';
         nodes.example.textContent = '点击“重置”重新开始。';
@@ -397,6 +465,13 @@ document.addEventListener('DOMContentLoaded', () => {
       nodes.word.textContent = current.word;
       nodes.uk.textContent = current.uk ? `UK ${current.uk}` : '';
       nodes.us.textContent = current.us ? `US ${current.us}` : '';
+      nodes.accents.forEach((button) => {
+        const active = button.dataset.studyAccent === pronunciationAccent;
+        button.classList.toggle('is-active', active);
+        button.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      nodes.speak.disabled = !speech;
+      nodes.speak.title = speech ? '使用当前设备语音播放单词' : '当前浏览器不支持设备发音';
       nodes.answer.hidden = !state.revealed;
       nodes.zh.textContent = current.zh;
       nodes.example.textContent = current.example ? current.example : ' ';
@@ -455,6 +530,19 @@ document.addEventListener('DOMContentLoaded', () => {
     nodes.reset.addEventListener('click', resetStudy);
     nodes.hard.addEventListener('click', markHard);
     nodes.known.addEventListener('click', markKnown);
+    nodes.speak.addEventListener('click', speakCurrentWord);
+    nodes.accents.forEach((button) => {
+      button.addEventListener('click', () => {
+        setPronunciationAccent(button.dataset.studyAccent);
+      });
+    });
+
+    loadSpeechVoices();
+    if (speech && typeof speech.addEventListener === 'function') {
+      speech.addEventListener('voiceschanged', loadSpeechVoices);
+    } else if (speech) {
+      speech.onvoiceschanged = loadSpeechVoices;
+    }
 
     render();
     persistState();
