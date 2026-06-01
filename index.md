@@ -12,15 +12,15 @@ home: true
   </div>
   <div class="home-hero__stats" aria-label="站点概览">
     <div class="hero-stat">
-      <strong>5</strong>
+      <strong>7</strong>
       <span>分类入口</span>
     </div>
     <div class="hero-stat">
-      <strong>24</strong>
+      <strong>31</strong>
       <span>词表文件</span>
     </div>
     <div class="hero-stat">
-      <strong>19532</strong>
+      <strong>51125</strong>
       <span>词条</span>
     </div>
   </div>
@@ -91,6 +91,32 @@ home: true
     </div>
     <div class="catalog-card__actions">
       <a class="action-button" href="{{ '/六级/' | relative_url }}">进入分类</a>
+    </div>
+  </article>
+
+  <article class="catalog-card catalog-card--primary">
+    <div class="catalog-card__eyebrow">专四</div>
+    <h2 class="catalog-card__title">TEM-4 分类词汇</h2>
+    <p class="catalog-card__copy">适合英语专业四级备考，包含核心词汇和真题高频词。</p>
+    <div class="catalog-card__meta">
+      <span>4 本词表</span>
+      <span>8493 词</span>
+    </div>
+    <div class="catalog-card__actions">
+      <a class="action-button" href="{{ '/专四/' | relative_url }}">进入分类</a>
+    </div>
+  </article>
+
+  <article class="catalog-card catalog-card--primary">
+    <div class="catalog-card__eyebrow">专八</div>
+    <h2 class="catalog-card__title">TEM-8 分类词汇</h2>
+    <p class="catalog-card__copy">适合英语专业八级备考，覆盖核心词汇和真题高频词。</p>
+    <div class="catalog-card__meta">
+      <span>3 本词表</span>
+      <span>23100 词</span>
+    </div>
+    <div class="catalog-card__actions">
+      <a class="action-button" href="{{ '/专八/' | relative_url }}">进入分类</a>
     </div>
   </article>
 </section>
