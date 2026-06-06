@@ -283,7 +283,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const deckUrl = window.location.href.split('#')[0];
     const storageKey = `${storagePrefix}${deckUrl}`;
     const accentStorageKey = `${storagePrefix}pronunciation-accent`;
-    const speech = 'speechSynthesis' in window ? window.speechSynthesis : null;
+    const speech = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window
+      ? window.speechSynthesis
+      : null;
     let speechVoices = [];
     let pronunciationAccent = safeGet(accentStorageKey) === 'uk' ? 'uk' : 'us';
     const defaultState = () => ({
@@ -408,25 +410,87 @@ document.addEventListener('DOMContentLoaded', () => {
       return speechVoices.find((voice) => voice.lang?.toLowerCase().startsWith('en')) || null;
     };
 
-    const speakCurrentWord = () => {
-      const current = deck[state.queue[0]];
-      if (!speech || !current?.word) {
+    const speakWord = (word, accent) => {
+      if (!speech || !word) {
         return;
       }
 
       loadSpeechVoices();
-      const utterance = new SpeechSynthesisUtterance(current.word);
-      utterance.lang = pronunciationAccent === 'uk' ? 'en-GB' : 'en-US';
+      const normalizedAccent = accent === 'uk' ? 'uk' : 'us';
+      const utterance = new window.SpeechSynthesisUtterance(word);
+      utterance.lang = normalizedAccent === 'uk' ? 'en-GB' : 'en-US';
       utterance.rate = 0.82;
       utterance.pitch = 1;
 
-      const voice = chooseSpeechVoice(pronunciationAccent);
+      const voice = chooseSpeechVoice(normalizedAccent);
       if (voice) {
         utterance.voice = voice;
       }
 
       speech.cancel();
       speech.speak(utterance);
+    };
+
+    const speakCurrentWord = () => {
+      const current = deck[state.queue[0]];
+      speakWord(current?.word, pronunciationAccent);
+    };
+
+    const createPronunciationButton = (word, accent) => {
+      const button = document.createElement('button');
+      const accentName = accent === 'uk' ? '英式' : '美式';
+      const label = `播放${accentName}发音：${word}`;
+      button.className = 'phonetic-play';
+      button.type = 'button';
+      button.disabled = !speech;
+      button.title = speech ? label : '当前浏览器不支持设备发音';
+      button.setAttribute('aria-label', label);
+      button.innerHTML = `
+        <svg class="phonetic-play__icon" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+          <path d="M4 10v4h4l5 4V6l-5 4H4z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8"/>
+          <path d="M16.2 9.2a4 4 0 0 1 0 5.6M18.8 6.8a7.8 7.8 0 0 1 0 10.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"/>
+        </svg>
+      `;
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        speakWord(word, accent);
+      });
+      return button;
+    };
+
+    const enhancePronunciationCells = () => {
+      if (indexMap.uk < 0 && indexMap.us < 0) {
+        return;
+      }
+
+      Array.from(table.querySelectorAll('tbody tr')).forEach((row) => {
+        const cells = Array.from(row.querySelectorAll('td'));
+        const word = normalize(cells[indexMap.word]?.textContent);
+        if (!word) {
+          return;
+        }
+
+        [
+          [indexMap.uk, 'uk'],
+          [indexMap.us, 'us'],
+        ].forEach(([cellIndex, accent]) => {
+          const cell = cells[cellIndex];
+          if (!cell || cell.dataset.pronunciationEnhanced === 'true') {
+            return;
+          }
+
+          const phone = normalize(cell.textContent) || '-';
+          const wrapper = document.createElement('span');
+          const value = document.createElement('span');
+          wrapper.className = 'phonetic-control';
+          value.className = 'phonetic-value';
+          value.textContent = phone;
+          wrapper.append(value, createPronunciationButton(word, accent));
+          cell.dataset.pronunciationEnhanced = 'true';
+          cell.replaceChildren(wrapper);
+        });
+      });
     };
 
     const setPronunciationAccent = (accent) => {
@@ -544,6 +608,7 @@ document.addEventListener('DOMContentLoaded', () => {
       speech.onvoiceschanged = loadSpeechVoices;
     }
 
+    enhancePronunciationCells();
     render();
     persistState();
 
