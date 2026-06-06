@@ -309,7 +309,7 @@ html[data-theme="dark"] .theme-icon-moon {
 .page-kind-vocab .markdown-body td:nth-child(3),
 .page-kind-vocab .markdown-body th:nth-child(4),
 .page-kind-vocab .markdown-body td:nth-child(4) {
-  min-width: 176px;
+  min-width: 136px;
 }
 
 .page-kind-vocab .markdown-body th:nth-child(6),
@@ -354,44 +354,38 @@ html[data-theme="dark"] .theme-icon-moon {
 }
 
 .phonetic-control {
-  align-items: center;
-  display: inline-flex;
-  gap: 10px;
-  justify-content: space-between;
-  width: 100%;
+  display: inline-block;
+  padding-right: 18px;
+  position: relative;
   white-space: nowrap;
 }
 
 .phonetic-value {
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-  min-width: 0;
 }
 
 .phonetic-play {
   align-items: center;
-  background: var(--blue);
-  border: 1px solid var(--blue);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
   border-radius: 999px;
-  color: var(--button-text);
+  color: var(--blue);
   cursor: pointer;
   display: inline-flex;
-  flex: 0 0 auto;
-  font: inherit;
-  font-size: 0.82rem;
-  font-weight: 700;
-  gap: 4px;
-  height: 30px;
+  height: 18px;
   justify-content: center;
-  line-height: 1;
-  min-width: 54px;
-  padding: 0 10px;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  top: -3px;
   transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  width: 18px;
 }
 
 .phonetic-play:hover {
-  background: var(--button-hover);
-  border-color: var(--button-hover);
-  color: var(--button-text);
+  background: var(--blue-soft);
+  border-color: var(--blue);
+  color: var(--blue);
   transform: translateY(-1px);
 }
 
@@ -407,8 +401,8 @@ html[data-theme="dark"] .theme-icon-moon {
 }
 
 .phonetic-play__icon {
-  height: 14px;
-  width: 14px;
+  height: 10px;
+  width: 10px;
 }
 
 .home-copy {

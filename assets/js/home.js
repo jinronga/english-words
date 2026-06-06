@@ -491,7 +491,6 @@ document.addEventListener('DOMContentLoaded', () => {
           <path d="M4 10v4h4l5 4V6l-5 4H4z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8"/>
           <path d="M16.2 9.2a4 4 0 0 1 0 5.6M18.8 6.8a7.8 7.8 0 0 1 0 10.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"/>
         </svg>
-        <span>听</span>
       `;
       button.addEventListener('click', (event) => {
         event.preventDefault();
