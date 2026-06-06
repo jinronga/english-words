@@ -18,7 +18,7 @@
       }
     }());
   </script>
-  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 </head>
 {% assign page_kind = 'doc' %}
 {% if page.home %}
@@ -86,6 +86,6 @@
       <span>仅供学习交流</span>
     </footer>
   </div>
-  <script src="{{ '/assets/js/home.js' | relative_url }}" defer></script>
+  <script src="{{ '/assets/js/home.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
 </body>
 </html>

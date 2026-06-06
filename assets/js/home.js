@@ -286,6 +286,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const speech = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window
       ? window.speechSynthesis
       : null;
+    const canUseAudio = 'Audio' in window;
+    const canPlayPronunciation = canUseAudio || Boolean(speech);
+    let activeAudio = null;
     let speechVoices = [];
     let pronunciationAccent = safeGet(accentStorageKey) === 'uk' ? 'uk' : 'us';
     const defaultState = () => ({
@@ -410,7 +413,14 @@ document.addEventListener('DOMContentLoaded', () => {
       return speechVoices.find((voice) => voice.lang?.toLowerCase().startsWith('en')) || null;
     };
 
-    const speakWord = (word, accent) => {
+    const normalizeAudioWord = (word) => {
+      return normalize(word)
+        .replace(/[“”"]/g, '')
+        .replace(/(?:\.\.\.|…)+/g, ' ')
+        .trim();
+    };
+
+    const speakWithDeviceVoice = (word, accent) => {
       if (!speech || !word) {
         return;
       }
@@ -431,6 +441,37 @@ document.addEventListener('DOMContentLoaded', () => {
       speech.speak(utterance);
     };
 
+    const playDictionaryAudio = (word, accent) => {
+      if (!canUseAudio || !word) {
+        return Promise.reject(new Error('audio unavailable'));
+      }
+
+      const audioType = accent === 'uk' ? '1' : '2';
+      const audioWord = normalizeAudioWord(word);
+      const audio = new window.Audio(
+        `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(audioWord)}&type=${audioType}`,
+      );
+
+      if (activeAudio) {
+        activeAudio.pause();
+        activeAudio.currentTime = 0;
+      }
+
+      activeAudio = audio;
+      return audio.play();
+    };
+
+    const speakWord = (word, accent) => {
+      if (!word) {
+        return;
+      }
+
+      const normalizedAccent = accent === 'uk' ? 'uk' : 'us';
+      playDictionaryAudio(word, normalizedAccent).catch(() => {
+        speakWithDeviceVoice(word, normalizedAccent);
+      });
+    };
+
     const speakCurrentWord = () => {
       const current = deck[state.queue[0]];
       speakWord(current?.word, pronunciationAccent);
@@ -442,14 +483,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const label = `播放${accentName}发音：${word}`;
       button.className = 'phonetic-play';
       button.type = 'button';
-      button.disabled = !speech;
-      button.title = speech ? label : '当前浏览器不支持设备发音';
+      button.disabled = !canPlayPronunciation;
+      button.title = canPlayPronunciation ? label : '当前浏览器不支持发音播放';
       button.setAttribute('aria-label', label);
       button.innerHTML = `
         <svg class="phonetic-play__icon" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
           <path d="M4 10v4h4l5 4V6l-5 4H4z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8"/>
           <path d="M16.2 9.2a4 4 0 0 1 0 5.6M18.8 6.8a7.8 7.8 0 0 1 0 10.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"/>
         </svg>
+        <span>听</span>
       `;
       button.addEventListener('click', (event) => {
         event.preventDefault();
@@ -534,8 +576,8 @@ document.addEventListener('DOMContentLoaded', () => {
         button.classList.toggle('is-active', active);
         button.setAttribute('aria-pressed', active ? 'true' : 'false');
       });
-      nodes.speak.disabled = !speech;
-      nodes.speak.title = speech ? '使用当前设备语音播放单词' : '当前浏览器不支持设备发音';
+      nodes.speak.disabled = !canPlayPronunciation;
+      nodes.speak.title = canPlayPronunciation ? '播放当前单词发音' : '当前浏览器不支持发音播放';
       nodes.answer.hidden = !state.revealed;
       nodes.zh.textContent = current.zh;
       nodes.example.textContent = current.example ? current.example : ' ';
