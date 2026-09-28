@@ -19,7 +19,7 @@ BOOK_LINK_RE = re.compile(
 )
 TARGET_BOOK_TITLES = {
     *(f"人教版高中英语-必修{i}" for i in range(1, 6)),
-    *(f"人教版高中英语-选修{i}" for i in range(6, 10)),
+    *(f"人教版高中英语-选修{i}" for i in range(6, 12)),
 }
 
 
